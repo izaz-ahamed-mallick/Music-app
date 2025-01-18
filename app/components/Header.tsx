@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
 import Button from "./Button";
+import useUserRoleStore from "@/store/userRoleStore";
 
 interface HeaderProps {
     children: React.ReactNode;
@@ -15,6 +16,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
     const router = useRouter();
+    const { role } = useUserRoleStore();
 
     const handleSignUpClick = () => {
         // Perform actions for sign up
@@ -59,23 +61,36 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                         <BiSearch className="text-black" size={20} />
                     </button>
                 </div>
-                <div className="flex justify-between items-center gap-x-4 ">
-                    <div>
-                        <Button
-                            onClick={handleSignUpClick}
-                            className="bg-transparent text-neutral-300 font-medium"
-                        >
-                            Sign up
-                        </Button>
+                {
+                    <div className="flex justify-between items-center gap-x-4 ">
+                        <div>
+                            <Button
+                                onClick={handleSignUpClick}
+                                className="bg-transparent text-neutral-300 font-medium"
+                            >
+                                Sign up
+                            </Button>
+                        </div>
+                        <div>
+                            <Button
+                                onClick={handleLoginClick}
+                                className="bg-white px-6 py-2"
+                            >
+                                Log In
+                            </Button>
+                        </div>
                     </div>
-                    <div>
-                        <Button
-                            onClick={handleLoginClick}
-                            className="bg-white px-6 py-2"
-                        >
-                            Log In
-                        </Button>
-                    </div>
+                }
+
+                <div>
+                    {role ? (
+                        <>
+                            <h1>
+                                Welcome, {role === "user" ? "User" : "Admin"}
+                            </h1>
+                            {role === "admin" && <button>Admin Panel</button>}
+                        </>
+                    ) : null}
                 </div>
             </div>
             {children}
