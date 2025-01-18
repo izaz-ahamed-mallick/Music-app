@@ -1,0 +1,111 @@
+"use client";
+
+import { useForm } from "react-hook-form";
+
+import useUserRole from "@/app/hooks/useUserRole";
+
+interface FormData {
+    email: string;
+    password: string;
+}
+
+const LoginPage = () => {
+    const { errorMessage, loading, onLogin } = useUserRole();
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>();
+
+    // Handle login submission
+    const onSubmit = async (data: FormData) => {
+        onLogin(data.email, data.password);
+    };
+
+    return (
+        <div className="flex justify-center items-center min-h-screen bg-black">
+            <div className="bg-gray-800 p-8 rounded-lg shadow-md w-96">
+                <h2 className="text-2xl font-semibold text-center text-white mb-4">
+                    Login
+                </h2>
+
+                {errorMessage && (
+                    <p className="text-red-500 text-center mb-4">
+                        {errorMessage}
+                    </p>
+                )}
+
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    <div>
+                        <label
+                            htmlFor="email"
+                            className="block text-sm font-medium text-gray-300"
+                        >
+                            Email Address
+                        </label>
+                        <input
+                            id="email"
+                            type="email"
+                            {...register("email", {
+                                required: "Email is required",
+                            })}
+                            className="mt-1 block w-full px-4 py-2 border rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        {errors.email && (
+                            <p className="text-red-500 text-sm">
+                                {errors.email.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div>
+                        <label
+                            htmlFor="password"
+                            className="block text-sm font-medium text-gray-300"
+                        >
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            type="password"
+                            {...register("password", {
+                                required: "Password is required",
+                            })}
+                            className="mt-1 block w-full px-4 py-2 border rounded-lg bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                        {errors.password && (
+                            <p className="text-red-500 text-sm">
+                                {errors.password.message}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 disabled:opacity-50"
+                        >
+                            {loading ? "Logging in..." : "Login"}
+                        </button>
+                    </div>
+                </form>
+
+                <div className="mt-4 text-center">
+                    <p className="text-sm text-gray-400">
+                        Dont have an account?{" "}
+                        <a
+                            href="/auth/signup"
+                            className="text-blue-500 hover:underline"
+                        >
+                            Sign up
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default LoginPage;
