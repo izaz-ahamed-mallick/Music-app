@@ -48,18 +48,22 @@ const AuthDropdown: React.FC = () => {
                 </button>
             ) : (
                 <div className="flex justify-between items-center gap-x-4">
-                    <Button
-                        onClick={handleSignUpClick}
-                        className="bg-transparent text-neutral-300 font-medium"
-                    >
-                        Sign up
-                    </Button>
-                    <Button
-                        onClick={handleLoginClick}
-                        className="bg-white px-6 py-2"
-                    >
-                        Log In
-                    </Button>
+                    <div>
+                        <Button
+                            onClick={handleSignUpClick}
+                            className="bg-transparent text-neutral-300 font-medium"
+                        >
+                            Sign up
+                        </Button>
+                    </div>
+                    <div>
+                        <Button
+                            onClick={handleLoginClick}
+                            className="bg-white px-6 py-2"
+                        >
+                            Log In
+                        </Button>
+                    </div>
                 </div>
             )}
 

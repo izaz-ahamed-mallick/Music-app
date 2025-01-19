@@ -61,7 +61,6 @@ const EditAlbumForm = ({
                 : coverImagePreview;
             const albumCoverUrl = await uploadFileToAlbum(file, "album-covers");
 
-            // Now update the album data in the database
             const { error } = await supaBaseInstence
                 .from("albums")
                 .update({
@@ -89,7 +88,6 @@ const EditAlbumForm = ({
                 Update Album Details
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                {/* Album Name */}
                 <div className="relative">
                     <label
                         htmlFor="albumName"
@@ -113,7 +111,6 @@ const EditAlbumForm = ({
                     )}
                 </div>
 
-                {/* Artist */}
                 <div className="relative">
                     <label
                         htmlFor="artist"
@@ -137,7 +134,6 @@ const EditAlbumForm = ({
                     )}
                 </div>
 
-                {/* Release Date */}
                 <div className="relative">
                     <label
                         htmlFor="releaseDate"
@@ -160,7 +156,6 @@ const EditAlbumForm = ({
                     )}
                 </div>
 
-                {/* Cover Image */}
                 <div className="relative">
                     <label
                         htmlFor="coverImage"
@@ -189,7 +184,6 @@ const EditAlbumForm = ({
                     )}
                 </div>
 
-                {/* Buttons */}
                 <div className="flex justify-between mt-6">
                     <button
                         type="button"

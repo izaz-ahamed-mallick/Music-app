@@ -38,7 +38,6 @@ const AlbumOverview = () => {
         fetchAlbumRef.current();
     }, []);
 
-    // Search filter logic
     const filteredAlbums = albums.filter(
         (album) =>
             album.album_name
@@ -81,7 +80,6 @@ const AlbumOverview = () => {
                 Albums Overview
             </h2>
 
-            {/* Search Bar */}
             <input
                 type="text"
                 placeholder="Search by album name or artist"
