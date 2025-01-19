@@ -1,16 +1,22 @@
 "use client";
 
 import React, { useState } from "react";
-import Button from "../components/Button"; // Assuming you have a Button component.
+import Button from "../components/Button";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
 import CreateAlbum from "./createAlbum";
+import CreateSong from "./CreateSong";
 
 const Admin = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isAlbumModalOpen, setIsAlbumModalOpen] = useState(false);
+    const [isSongModalOpen, setIsSongModalOpen] = useState(false); // New state for song modal
 
-    const openModal = () => setIsModalOpen(true);
-    const closeModal = () => setIsModalOpen(false);
+    const openAlbumModal = () => setIsAlbumModalOpen(true);
+    const closeAlbumModal = () => setIsAlbumModalOpen(false);
+
+    const openSongModal = () => setIsSongModalOpen(true); // Open song modal
+    const closeSongModal = () => setIsSongModalOpen(false); // Close song modal
+
     return (
         <Header>
             <div className="min-h-screen text-white p-8">
@@ -19,11 +25,21 @@ const Admin = () => {
                         <h1 className="text-4xl font-semibold">
                             Admin Dashboard
                         </h1>
+
+                        {/* Create Album Button */}
                         <Button
-                            onClick={openModal}
+                            onClick={openAlbumModal}
                             className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
                         >
                             Create Album
+                        </Button>
+
+                        {/* Create Song Button */}
+                        <Button
+                            onClick={openSongModal} // Open the song modal
+                            className="bg-green-600 text-white py-2 px-4 rounded-lg hover:bg-green-700"
+                        >
+                            Create Song
                         </Button>
                     </div>
 
@@ -55,8 +71,16 @@ const Admin = () => {
                     </div>
                 </div>
             </div>
-            <Modal isOpen={isModalOpen} onClose={closeModal}>
-                <CreateAlbum onClose={closeModal} />
+
+            {/* Modal for Album Creation */}
+            <Modal isOpen={isAlbumModalOpen} onClose={closeAlbumModal}>
+                <CreateAlbum onClose={closeAlbumModal} />
+            </Modal>
+
+            {/* Modal for Song Creation */}
+            <Modal isOpen={isSongModalOpen} onClose={closeSongModal}>
+                <CreateSong onClose={closeSongModal} />
+                {/* CreateSong is your form for creating songs */}
             </Modal>
         </Header>
     );

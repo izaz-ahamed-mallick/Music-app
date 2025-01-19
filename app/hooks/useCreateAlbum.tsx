@@ -30,33 +30,7 @@ const useCreateAlbum = () => {
         }
     };
 
-    const uploadCoverImage = async (file: File) => {
-        const filePath = `album-covers/${Date.now()}_${file.name}`;
-        const { data: albumPath, error } = await supaBaseInstence.storage
-            .from("album-covers")
-            .upload(filePath, file);
-
-        if (error) {
-            console.error("Error uploading cover image:", error);
-            return "";
-        }
-
-        if (!albumPath) {
-            return;
-        }
-        const { data: urlData } = supaBaseInstence.storage
-            .from("album-covers")
-            .getPublicUrl(albumPath.fullPath);
-
-        if (!urlData || !urlData.publicUrl) {
-            console.error("Error getting image public URL.");
-            return "";
-        }
-
-        return urlData.publicUrl;
-    };
-
-    return { uploadCoverImage, createAlbum };
+    return { createAlbum };
 };
 
 export default useCreateAlbum;

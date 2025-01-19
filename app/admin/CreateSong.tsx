@@ -1,48 +1,66 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-
-import Button from "../components/Button";
-
-import useCreateAlbum from "../hooks/useCreateAlbum";
+import Button from "../components/Button"; // Assuming you have a Button component.
+import { supaBaseInstence } from "@/lib/supabaseClient"; // Adjust import according to your project
+import useCreateSongs from "../hooks/useCreateSongs";
 import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
 
-interface ICreateAlbumForm {
-    albumName: string;
+interface ICreateSongForm {
+    title: string;
     artist: string;
-    releaseDate: string;
-    coverImage: FileList;
+    albumId: string;
+    duration: string;
+    audioFile: FileList;
 }
 
-interface ICreateAlbumProps {
+interface ICreateSongProps {
     onClose: () => void;
 }
 
-const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
-    const { createAlbum } = useCreateAlbum();
+const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
+    const [albums, setAlbums] = useState<{ id: string; album_name: string }[]>(
+        []
+    );
+    const { createSongs } = useCreateSongs();
     const { uploadFileToAlbum } = useCreateUrlFromStorage();
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<ICreateAlbumForm>();
+    } = useForm<ICreateSongForm>();
 
-    const onSubmit = async (data: ICreateAlbumForm) => {
-        const { albumName, artist, releaseDate, coverImage } = data;
+    // Fetch albums from Supabase when the component mounts
+    useEffect(() => {
+        const fetchAlbums = async () => {
+            const { data, error } = await supaBaseInstence
+                .from("albums")
+                .select("id, album_name");
 
-        const coverImageUrl = await uploadFileToAlbum(
-            coverImage[0],
-            "album_covers"
-        );
-        if (!coverImageUrl) {
+            if (error) {
+                console.error("Error fetching albums:", error.message);
+            } else {
+                setAlbums(data); // Store fetched albums in state
+            }
+        };
+
+        fetchAlbums();
+    }, []);
+
+    const onSubmit = async (data: ICreateSongForm) => {
+        const { title, artist, albumId, audioFile } = data;
+        const audioFileUrl = await uploadFileToAlbum(audioFile[0], "songs");
+
+        if (!audioFileUrl || audioFileUrl.length === 0) {
             return;
         }
-        const sucess = await createAlbum({
-            albumName,
+
+        const sucess = await createSongs({
+            album_id: albumId,
             artist,
-            coverImageUrl,
-            releaseDate,
+            audio_file_url: audioFileUrl,
+            title,
         });
 
         if (sucess) {
@@ -51,30 +69,30 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
     };
 
     return (
-        <div className="w-full max-w-lg  bg-white bg-opacity-10 backdrop-blur-lg p-4 rounded-xl shadow-lg border border-gray-300">
+        <div className="w-full max-w-lg bg-white bg-opacity-10 backdrop-blur-lg p-4 rounded-xl shadow-lg border border-gray-300">
             <h2 className="text-4xl font-semibold text-center text-blue-600 mb-6">
-                Create a New Album
+                Create a New Song
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div className="relative">
                     <label
-                        htmlFor="albumName"
+                        htmlFor="title"
                         className="block text-lg font-medium text-gray-100 mb-2"
                     >
-                        Album Name
+                        Title
                     </label>
                     <input
-                        id="albumName"
+                        id="title"
                         type="text"
-                        placeholder="Enter album name"
+                        placeholder="Enter song title"
                         className="w-full p-2 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("albumName", {
-                            required: "Album name is required",
+                        {...register("title", {
+                            required: "Song title is required",
                         })}
                     />
-                    {errors.albumName && (
+                    {errors.title && (
                         <p className="text-red-500 text-sm mt-1">
-                            {errors.albumName.message}
+                            {errors.title.message}
                         </p>
                     )}
                 </div>
@@ -103,49 +121,61 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
                     )}
                 </div>
 
-                {/* Release Date */}
+                {/* Album */}
                 <div className="relative">
                     <label
-                        htmlFor="releaseDate"
+                        htmlFor="albumId"
                         className="block text-lg font-medium text-gray-100 mb-2"
                     >
-                        Release Date
+                        Album
                     </label>
-                    <input
-                        id="releaseDate"
-                        type="date"
-                        className="w-full p-2 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("releaseDate", {
-                            required: "Release date is required",
+                    <select
+                        id="albumId"
+                        {...register("albumId", {
+                            required: "Album selection is required",
                         })}
-                    />
-                    {errors.releaseDate && (
+                        className="w-full p-2 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <option className="text-black " value="">
+                            Select an Album
+                        </option>
+                        {albums.map((album) => (
+                            <option
+                                className="text-black cursor-pointer"
+                                key={album.id}
+                                value={album.id}
+                            >
+                                {album.album_name}
+                            </option>
+                        ))}
+                    </select>
+                    {errors.albumId && (
                         <p className="text-red-500 text-sm mt-1">
-                            {errors.releaseDate.message}
+                            {errors.albumId.message}
                         </p>
                     )}
                 </div>
 
-                {/* Cover Image */}
+                {/* Audio File */}
                 <div className="relative">
                     <label
-                        htmlFor="coverImage"
+                        htmlFor="audioFile"
                         className="block text-lg font-medium text-gray-100 mb-2"
                     >
-                        Cover Image
+                        Audio File
                     </label>
                     <input
-                        id="coverImage"
+                        id="audioFile"
                         type="file"
-                        accept="image/*"
+                        accept="audio/*"
                         className="w-full p-2 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        {...register("coverImage", {
-                            required: "Cover image is required",
+                        {...register("audioFile", {
+                            required: "Audio file is required",
                         })}
                     />
-                    {errors.coverImage && (
+                    {errors.audioFile && (
                         <p className="text-red-500 text-sm mt-1">
-                            {errors.coverImage.message}
+                            {errors.audioFile.message}
                         </p>
                     )}
                 </div>
@@ -156,7 +186,7 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
                         type="submit"
                         className="w-full bg-blue-600 text-white rounded-lg font-semibold text-lg hover:bg-blue-700 hover:shadow-lg transition duration-300"
                     >
-                        Create Album
+                        Create Song
                     </Button>
                 </div>
             </form>
@@ -164,4 +194,4 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
     );
 };
 
-export default CreateAlbum;
+export default CreateSong;
