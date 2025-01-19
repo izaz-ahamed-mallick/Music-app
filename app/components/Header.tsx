@@ -6,8 +6,8 @@ import { RxCaretLeft, RxCaretRight } from "react-icons/rx";
 import { useRouter } from "next/navigation";
 import { HiHome } from "react-icons/hi";
 import { BiSearch } from "react-icons/bi";
-import Button from "./Button";
-import useUserRoleStore from "@/store/userRoleStore";
+
+import AuthDropdown from "./AuthDropdown";
 
 interface HeaderProps {
     children: React.ReactNode;
@@ -16,19 +16,6 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ children, className }) => {
     const router = useRouter();
-    const { role } = useUserRoleStore();
-
-    const handleSignUpClick = () => {
-        // Perform actions for sign up
-        console.log("Sign Up button clicked!");
-        // You can redirect to the sign-up page
-        router.push("/auth/signup");
-    };
-
-    const handleLoginClick = () => {
-        // Redirect to the login page
-        router.push("/auth/login");
-    };
 
     return (
         <div
@@ -61,37 +48,9 @@ const Header: React.FC<HeaderProps> = ({ children, className }) => {
                         <BiSearch className="text-black" size={20} />
                     </button>
                 </div>
-                {
-                    <div className="flex justify-between items-center gap-x-4 ">
-                        <div>
-                            <Button
-                                onClick={handleSignUpClick}
-                                className="bg-transparent text-neutral-300 font-medium"
-                            >
-                                Sign up
-                            </Button>
-                        </div>
-                        <div>
-                            <Button
-                                onClick={handleLoginClick}
-                                className="bg-white px-6 py-2"
-                            >
-                                Log In
-                            </Button>
-                        </div>
-                    </div>
-                }
 
-                <div>
-                    {role ? (
-                        <>
-                            <h1>
-                                Welcome, {role === "user" ? "User" : "Admin"}
-                            </h1>
-                            {role === "admin" && <button>Admin Panel</button>}
-                        </>
-                    ) : null}
-                </div>
+                {/* Auth Buttons or Dropdown */}
+                <AuthDropdown />
             </div>
             {children}
         </div>

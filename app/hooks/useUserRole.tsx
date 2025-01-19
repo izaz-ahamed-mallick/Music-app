@@ -2,12 +2,15 @@ import { useState } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 import useUserRoleStore from "@/store/userRoleStore";
+import Cookies from "js-cookie";
+import { useUserAuth } from "@/store/useUserAuth";
 
 const useUserRole = () => {
     const [loading, setLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const router = useRouter();
     const { setRole } = useUserRoleStore();
+    const { setAuth } = useUserAuth();
 
     const checkUserRole = async (userId: string) => {
         const { data, error } = await supaBaseInstence
@@ -37,9 +40,29 @@ const useUserRole = () => {
             if (error) {
                 setErrorMessage(error.message);
             } else if (userData) {
-                console.log(userData);
+                Cookies.set(
+                    "access_token",
+                    userData.session?.access_token ?? "",
+                    {
+                        expires: 1,
+                        secure: true,
+                        sameSite: "Lax",
+                    }
+                );
+
+                Cookies.set(
+                    "refresh_token",
+                    userData.session?.refresh_token ?? "",
+                    {
+                        expires: 7,
+                        secure: true,
+                        sameSite: "Lax",
+                    }
+                );
+                setAuth(true);
                 const role = await checkUserRole(userData.user?.id);
                 setRole(role);
+
                 router.push("/");
             }
         } catch (error) {
