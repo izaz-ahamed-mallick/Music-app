@@ -45,7 +45,6 @@ const SignUpPage = () => {
                 }
             } else {
                 const user = signUpData?.user;
-                console.log(user);
 
                 if (user) {
                     router.push("/auth/login");

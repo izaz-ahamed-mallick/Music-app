@@ -33,7 +33,7 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
 
         const coverImageUrl = await uploadFileToAlbum(
             coverImage[0],
-            "album_covers"
+            "album-covers"
         );
         if (!coverImageUrl) {
             return;
