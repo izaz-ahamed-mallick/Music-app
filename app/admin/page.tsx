@@ -8,6 +8,7 @@ import CreateAlbum from "./CreateAlbum";
 import CreateSong from "./CreateSong";
 import AlbumOverview from "./AlbumOverview";
 import { useModelStore } from "@/store/useModelStore";
+import UserManagement from "./UserManagement";
 
 const Admin = () => {
     const [isSongModalOpen, setIsSongModalOpen] = useState(false);
@@ -44,7 +45,7 @@ const Admin = () => {
                     </div>
 
                     {/* Admin Dashboard Overview */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 space-y-10">
                         {/* Album Overview Card */}
                         <div className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-lg shadow-lg transform transition-all ">
                             <h2 className="text-3xl font-semibold mb-4 text-white">
@@ -57,14 +58,15 @@ const Admin = () => {
                         </div>
 
                         {/* User Management Card */}
-                        {/* <div className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl">
+                        <div className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-lg shadow-lg">
                             <h2 className="text-3xl font-semibold mb-4 text-white">
                                 User Management
                             </h2>
                             <p className="text-gray-200 text-lg">
                                 Manage users, roles, and permissions.
                             </p>
-                        </div> */}
+                            <UserManagement />
+                        </div>
 
                         {/* Settings Card */}
                         {/* <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-6 rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl">

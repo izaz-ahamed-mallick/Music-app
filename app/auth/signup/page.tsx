@@ -2,13 +2,13 @@
 
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 type FormData = {
     email: string;
     password: string;
+    displayName: string; // New field for display name
 };
 
 const SignUpPage = () => {
@@ -27,11 +27,16 @@ const SignUpPage = () => {
         setErrorMessage(null); // Clear any previous error messages
 
         try {
-            const { email, password } = data;
+            const { email, password, displayName } = data;
             const { data: signUpData, error } =
                 await supaBaseInstence.auth.signUp({
                     email,
                     password,
+                    options: {
+                        data: {
+                            display_name: displayName,
+                        },
+                    },
                 });
 
             if (error) {
@@ -59,8 +64,8 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen ">
-            <div className=" bg-gradient-to-b from-emerald-900 p-6 rounded-lg shadow-md w-96">
+        <div className="flex justify-center items-center min-h-screen">
+            <div className="bg-gradient-to-b from-emerald-900 p-6 rounded-lg shadow-md w-96">
                 <h2 className="text-xl font-semibold mb-4 text-center">
                     Sign Up
                 </h2>
@@ -72,6 +77,29 @@ const SignUpPage = () => {
 
                 {/* SignUp Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    {/* Display Name */}
+                    <div>
+                        <label
+                            htmlFor="displayName"
+                            className="block text-sm font-medium"
+                        >
+                            Name
+                        </label>
+                        <input
+                            type="text"
+                            id="displayName"
+                            {...register("displayName", {
+                                required: "Display name is required",
+                            })}
+                            className="w-full mt-2 px-3 py-2 border rounded-md"
+                        />
+                        {errors.displayName && (
+                            <p className="text-red-500 text-sm">
+                                {errors.displayName.message}
+                            </p>
+                        )}
+                    </div>
+
                     {/* Email */}
                     <div>
                         <label
