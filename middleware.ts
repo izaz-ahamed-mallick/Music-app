@@ -1,34 +1,45 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { supaBaseInstence } from "./lib/supabaseClient";
+import { supabaseServerClient } from "./lib/supabaseClient";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
 
     if (pathname.startsWith("/admin")) {
         const token = req.cookies.get("access_token")?.value;
-
         if (!token) {
+            console.log("No token found, redirecting to home");
+            return NextResponse.redirect(new URL("/", req.url));
+        }
+        if (!supabaseServerClient) {
+            console.error(
+                "Supabase Service Role Client is not configured properly."
+            );
             return NextResponse.redirect(new URL("/", req.url));
         }
 
         const {
             data: { user },
             error,
-        } = await supaBaseInstence.auth.getUser(token);
+        } = await supabaseServerClient.auth.getUser(token);
 
         if (error || !user) {
+            console.log("Error getting user from token:", error);
             return NextResponse.redirect(new URL("/", req.url));
         }
 
-        // Check if the user is an admin
-        const { data: roles, error: roleError } = await supaBaseInstence
+        const { data: roles, error: roleError } = await supabaseServerClient
             .from("users")
             .select("role")
             .eq("id", user.id)
             .single();
 
-        if (roleError || roles.role !== "admin") {
+        if (roleError || !roles) {
+            console.log("Error fetching user roles:", roleError);
+            return NextResponse.redirect(new URL("/", req.url));
+        }
+
+        if (roles.role !== "admin") {
             return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
     }
@@ -37,5 +48,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/admin/:path*"],
+    matcher: ["/admin/:path*"], // Applies the middleware to any path under /admin
 };
