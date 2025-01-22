@@ -1,23 +1,28 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { supaBaseInstence } from "./lib/supabaseClient";
+import { isTokenExpired } from "./lib/IsTokenExpire";
 
 export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
+    const token = req.cookies.get("access_token")?.value;
+
+    if (isTokenExpired(token)) {
+        return NextResponse.redirect(new URL("/auth/login", req.url));
+    }
+    if (!token) {
+        console.log("No token found, redirecting to home");
+        return NextResponse.redirect(new URL("/", req.url));
+    }
 
     if (pathname.startsWith("/admin")) {
-        const token = req.cookies.get("access_token")?.value;
         console.log("token", token);
-        if (!token) {
-            console.log("No token found, redirecting to home");
-            return NextResponse.redirect(new URL("/", req.url));
-        }
 
         const {
             data: { user },
             error,
         } = await supaBaseInstence.auth.getUser(token);
-        console.log("User ID:", user?.id);
+
         if (error || !user) {
             console.log("Error getting user from token:", error);
             return NextResponse.redirect(new URL("/", req.url));

@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-import { IUserData } from "../admin/UserManagement";
+import { IUserData } from "./admin/UserManagement";
 
 interface FormData {
     username: string;
@@ -61,7 +61,7 @@ const EditUserForm = ({
     return (
         <div className="w-full max-w-lg bg-white bg-opacity-10 backdrop-blur-lg p-6 rounded-xl shadow-lg border border-gray-300">
             <h2 className="text-4xl font-semibold text-center text-blue-600 mb-6">
-                Update Album Details
+                Manage User details
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="relative">

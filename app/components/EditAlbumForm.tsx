@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
 import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
-import { IAlbumData } from "../admin/AlbumOverview";
+import { IAlbumData } from "./admin/AlbumOverview";
 
 interface FormData {
     albumName: string;

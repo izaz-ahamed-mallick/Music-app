@@ -1,3 +1,4 @@
+import Albums from "./components/album/Albums";
 import Header from "./components/Header";
 
 export default function Home() {
@@ -10,13 +11,13 @@ export default function Home() {
                     </h1>
                 </div>
             </Header>
-            <div className="mt-2 mb-7 px-6">
-                <div className="flex justify-between items-center ">
-                    <h1 className="text-white text-2xl font-semibold">
-                        Newest Song
+            <div className="mt-1 mb-6 px-6">
+                <div className="flex flex-col ">
+                    <h1 className="text-white text-2xl font-semibold mb-4">
+                        Albums
                     </h1>
+                    <Albums />
                 </div>
-                <div>List of Songs!</div>
             </div>
         </div>
     );

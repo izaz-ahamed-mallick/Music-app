@@ -6,6 +6,10 @@ html,
 body,
 :root {
     height: 100%;
-    background-color: black;
+    background: linear-gradient(to bottom, #064e3b, #000000 70%);
+
     color-scheme: dark;
+}
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Edge */
 }

@@ -1,11 +1,11 @@
 "use client";
 
+import useCreateSongs from "@/app/hooks/useCreateSongs";
+import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import Button from "../components/Button"; // Assuming you have a Button component.
-import { supaBaseInstence } from "@/lib/supabaseClient"; // Adjust import according to your project
-import useCreateSongs from "../hooks/useCreateSongs";
-import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
+import Button from "../Button";
+import { supaBaseInstence } from "@/lib/supabaseClient";
 
 interface ICreateSongForm {
     title: string;
@@ -31,7 +31,6 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
         formState: { errors },
     } = useForm<ICreateSongForm>();
 
-    // Fetch albums from Supabase when the component mounts
     useEffect(() => {
         const fetchAlbums = async () => {
             const { data, error } = await supaBaseInstence

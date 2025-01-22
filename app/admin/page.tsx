@@ -4,11 +4,12 @@ import React, { useState } from "react";
 import Button from "../components/Button";
 import Header from "../components/Header";
 import Modal from "../components/Modal";
-import CreateAlbum from "./CreateAlbum";
-import CreateSong from "./CreateSong";
-import AlbumOverview from "./AlbumOverview";
+
 import { useModelStore } from "@/store/useModelStore";
-import UserManagement from "./UserManagement";
+import UserManagement from "../components/admin/UserManagement";
+import AlbumOverview from "../components/admin/AlbumOverview";
+import CreateAlbum from "../components/admin/CreateAlbum";
+import CreateSong from "../components/admin/CreateSong";
 
 const Admin = () => {
     const [isSongModalOpen, setIsSongModalOpen] = useState(false);
@@ -51,7 +52,7 @@ const Admin = () => {
                             <h2 className="text-3xl font-semibold mb-4 text-white">
                                 Albums Overview
                             </h2>
-                            <p className="text-gray-200 text-lg">
+                            <p className="text-gray-200 text-lg mb-3">
                                 Manage and view all your albums here.
                             </p>
                             <AlbumOverview />
@@ -62,7 +63,7 @@ const Admin = () => {
                             <h2 className="text-3xl font-semibold mb-4 text-white">
                                 User Management
                             </h2>
-                            <p className="text-gray-200 text-lg">
+                            <p className="text-gray-200 text-lg mb-3">
                                 Manage users, roles, and permissions.
                             </p>
                             <UserManagement />

@@ -3,6 +3,9 @@
 import { useForm } from "react-hook-form";
 
 import useUserRole from "@/app/hooks/useUserRole";
+import { useState } from "react";
+import Modal from "@/app/components/Modal";
+import ForgotPassword from "@/app/components/ForgotPassword";
 
 interface FormData {
     email: string;
@@ -11,6 +14,7 @@ interface FormData {
 
 const LoginPage = () => {
     const { errorMessage, loading, onLogin } = useUserRole();
+    const [isOpen, setIsOpen] = useState(false);
 
     const {
         register,
@@ -24,8 +28,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen bg-black">
-            <div className="bg-gray-800 p-8 rounded-lg shadow-md w-96">
+        <div className="flex justify-center items-center min-h-screen ">
+            <div className="bg-gray-800 bg-opacity-65 p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-semibold text-center text-white mb-4">
                     Login
                 </h2>
@@ -102,8 +106,17 @@ const LoginPage = () => {
                             Sign up
                         </a>
                     </p>
+                    <button
+                        onClick={() => setIsOpen(true)}
+                        className="text-blue-500 hover:underline"
+                    >
+                        Forgot Password?
+                    </button>
                 </div>
             </div>
+            <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+                <ForgotPassword onClose={() => setIsOpen(false)} />
+            </Modal>
         </div>
     );
 };

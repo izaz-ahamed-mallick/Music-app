@@ -1,73 +1,76 @@
 import React, { useState, useEffect, useRef } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 
-import Modal from "../components/Modal";
-import EditUserForm from "../components/EditUserForm";
+import Image from "next/image";
 
-export interface IUserData {
+import { useModelStore } from "@/store/useModelStore";
+import Button from "../Button";
+import Modal from "../Modal";
+import EditAlbumForm from "../EditAlbumForm";
+
+export interface IAlbumData {
+    album_name: string;
+    artist: string;
+    cover_image: string;
     id: string;
-    email: string;
-    username: string;
-    role: string;
+    release_date: string;
 }
 
-const UserManagement = () => {
-    const [users, setUsers] = useState<IUserData[]>([]);
+const AlbumOverview = () => {
+    const [albums, setAlbums] = useState<IAlbumData[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<IUserData | null>(null);
-    const fetchUsersRef = useRef<() => Promise<void> | null>(null);
+    const [selectedAlbum, setSelectedAlbum] = useState<IAlbumData | null>(null);
+    const fetchAlbumRef = useRef<() => Promise<void> | null>(null);
+    const { openAlbumModal } = useModelStore();
 
     useEffect(() => {
-        fetchUsersRef.current = async () => {
+        fetchAlbumRef.current = async () => {
             const { data, error } = await supaBaseInstence
-                .from("users")
-                .select("id,role,username,email");
+                .from("albums")
+                .select("id, album_name, artist, release_date, cover_image");
             if (error) {
-                console.error("Error fetching users:", error.message);
+                console.error("Error fetching albums:", error.message);
             } else {
-                console.log(data);
-                setUsers(data);
+                setAlbums(data);
             }
         };
 
-        fetchUsersRef.current();
+        fetchAlbumRef.current();
     }, []);
 
-    const filteredUsers = users.filter(
-        (user) =>
-            (user.username?.toLowerCase() || "").includes(
-                searchQuery.toLowerCase()
-            ) ||
-            (user.email?.toLowerCase() || "").includes(
-                searchQuery.toLowerCase()
-            )
+    const filteredAlbums = albums.filter(
+        (album) =>
+            album.album_name
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase()) ||
+            album.artist.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
     };
 
-    const handleEditUser = (user: IUserData) => {
-        setSelectedUser(user);
+    const handleEditAlbum = (album: IAlbumData) => {
+        setSelectedAlbum(album);
         setIsEditModalOpen(true);
     };
 
     const handleSaveChanges = () => {
         setIsEditModalOpen(false);
-        if (fetchUsersRef.current) fetchUsersRef.current();
+        if (fetchAlbumRef.current) fetchAlbumRef.current();
     };
 
-    const handleDeleteUser = async (userId: string) => {
+    const handleDeleteAlbum = async (albumId: string) => {
         const { error } = await supaBaseInstence
-            .from("users")
+            .from("albums")
             .delete()
-            .match({ id: userId });
+            .match({ id: albumId });
         if (error) {
-            console.error("Error deleting user:", error.message);
+            console.error("Error deleting album:", error.message);
         } else {
-            setUsers((prevUsers) =>
-                prevUsers.filter((user) => user.id !== userId)
+            setAlbums((prevAlbums) =>
+                prevAlbums.filter((album) => album.id !== albumId)
             );
         }
     };
@@ -75,19 +78,19 @@ const UserManagement = () => {
     return (
         <div className="p-6 w-full bg-gray-800 rounded-lg shadow-lg">
             <h2 className="text-2xl font-semibold text-white mb-4">
-                User Management
+                Albums Overview
             </h2>
 
             <input
                 type="text"
-                placeholder="Search by username or email"
+                placeholder="Search by album name or artist"
                 value={searchQuery}
                 onChange={handleSearchChange}
                 className="w-full p-3 mb-4 bg-gray-700 text-white rounded-md"
             />
 
             <div className="mb-4 text-white">
-                <span>Total Users: {users.length}</span>
+                <span>Total Albums: {albums.length}</span>
             </div>
 
             <div className="overflow-x-auto bg-gray-700 rounded-lg">
@@ -95,13 +98,16 @@ const UserManagement = () => {
                     <thead>
                         <tr>
                             <th className="text-left text-white py-2 px-4">
-                                Username
+                                Album Name
                             </th>
                             <th className="text-left text-white py-2 px-4">
-                                Email
+                                Artist
                             </th>
                             <th className="text-left text-white py-2 px-4">
-                                Role
+                                Release Date
+                            </th>
+                            <th className="text-left text-white py-2 px-4">
+                                Cover Image
                             </th>
                             <th className="text-left text-white py-2 px-4">
                                 Actions
@@ -109,30 +115,39 @@ const UserManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map((user) => (
+                        {filteredAlbums.map((album) => (
                             <tr
-                                key={user.id}
+                                key={album.id}
                                 className="border-t border-gray-600"
                             >
                                 <td className="py-2 px-4 text-white">
-                                    {user.username}
+                                    {album.album_name}
                                 </td>
                                 <td className="py-2 px-4 text-white">
-                                    {user.email}
+                                    {album.artist}
                                 </td>
                                 <td className="py-2 px-4 text-white">
-                                    {user.role}
+                                    {album.release_date}
+                                </td>
+                                <td className="py-2 px-4">
+                                    <Image
+                                        width={100}
+                                        height={100}
+                                        src={album.cover_image}
+                                        alt={album.album_name}
+                                        className="w-16 h-16 object-cover"
+                                    />
                                 </td>
                                 <td className="py-2 px-4">
                                     <button
-                                        onClick={() => handleEditUser(user)}
+                                        onClick={() => handleEditAlbum(album)} // Open the edit form
                                         className="text-blue-500 mr-2 hover:underline"
                                     >
                                         Edit
                                     </button>
                                     <button
                                         onClick={() =>
-                                            handleDeleteUser(user.id)
+                                            handleDeleteAlbum(album.id)
                                         }
                                         className="text-red-500 hover:underline"
                                     >
@@ -145,14 +160,23 @@ const UserManagement = () => {
                 </table>
             </div>
 
-            {/* Edit User Modal */}
-            {isEditModalOpen && selectedUser && (
+            {/* Create Album Button */}
+            <Button
+                onClick={openAlbumModal}
+                className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
+            >
+                Create New Album
+            </Button>
+
+            {/* Edit Album Modal */}
+
+            {isEditModalOpen && selectedAlbum && (
                 <Modal
                     isOpen={isEditModalOpen}
                     onClose={() => setIsEditModalOpen(false)}
                 >
-                    <EditUserForm
-                        user={selectedUser}
+                    <EditAlbumForm
+                        album={selectedAlbum}
                         onClose={() => setIsEditModalOpen(false)}
                         onSave={handleSaveChanges}
                     />
@@ -162,4 +186,4 @@ const UserManagement = () => {
     );
 };
 
-export default UserManagement;
+export default AlbumOverview;

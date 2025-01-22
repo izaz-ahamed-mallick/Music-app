@@ -1,12 +1,10 @@
 "use client";
 
+import useCreateAlbum from "@/app/hooks/useCreateAlbum";
+import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
 import React from "react";
 import { useForm } from "react-hook-form";
-
-import Button from "../components/Button";
-
-import useCreateAlbum from "../hooks/useCreateAlbum";
-import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
+import Button from "../Button";
 
 interface ICreateAlbumForm {
     albumName: string;
