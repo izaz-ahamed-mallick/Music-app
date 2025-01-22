@@ -6,14 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-
-interface ICreateSongForm {
-    title: string;
-    artist: string;
-    albumId: string;
-    duration: string;
-    audioFile: FileList;
-}
+import { ICreateSongForm } from "@/types/song";
 
 interface ICreateSongProps {
     onClose: () => void;

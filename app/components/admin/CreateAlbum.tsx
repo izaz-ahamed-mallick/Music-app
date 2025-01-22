@@ -5,13 +5,7 @@ import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
 import React from "react";
 import { useForm } from "react-hook-form";
 import Button from "../Button";
-
-interface ICreateAlbumForm {
-    albumName: string;
-    artist: string;
-    releaseDate: string;
-    coverImage: FileList;
-}
+import { ICreateAlbumForm } from "@/types/album";
 
 interface ICreateAlbumProps {
     onClose: () => void;

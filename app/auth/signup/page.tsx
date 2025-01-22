@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 type FormData = {
     email: string;
     password: string;
-    displayName: string; // New field for display name
+    displayName: string;
 };
 
 const SignUpPage = () => {
@@ -24,7 +24,7 @@ const SignUpPage = () => {
     // Form submission handler
     const onSubmit = async (data: FormData) => {
         setLoading(true);
-        setErrorMessage(null); // Clear any previous error messages
+        setErrorMessage(null);
 
         try {
             const { email, password, displayName } = data;
@@ -70,14 +70,11 @@ const SignUpPage = () => {
                     Sign Up
                 </h2>
 
-                {/* Display Error Message */}
                 {errorMessage && (
                     <p className="text-red-500 text-center">{errorMessage}</p>
                 )}
 
-                {/* SignUp Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    {/* Display Name */}
                     <div>
                         <label
                             htmlFor="displayName"
@@ -100,7 +97,6 @@ const SignUpPage = () => {
                         )}
                     </div>
 
-                    {/* Email */}
                     <div>
                         <label
                             htmlFor="email"
@@ -123,7 +119,6 @@ const SignUpPage = () => {
                         )}
                     </div>
 
-                    {/* Password */}
                     <div>
                         <label
                             htmlFor="password"
@@ -146,7 +141,6 @@ const SignUpPage = () => {
                         )}
                     </div>
 
-                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={loading}
@@ -158,7 +152,6 @@ const SignUpPage = () => {
                     </button>
                 </form>
 
-                {/* Redirect to login if already have an account */}
                 <p className="mt-4 text-center text-sm">
                     Already have an account?{" "}
                     <a

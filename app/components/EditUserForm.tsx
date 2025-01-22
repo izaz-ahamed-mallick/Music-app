@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-import { IUserData } from "./admin/UserManagement";
+import { IUserData } from "@/types/auth";
 
 interface FormData {
     username: string;

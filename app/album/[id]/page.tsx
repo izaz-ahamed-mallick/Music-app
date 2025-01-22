@@ -1,11 +1,20 @@
+import PlayButton from "@/app/components/PlayButton";
 import { supaBaseInstence } from "@/lib/supabaseClient";
+import { IAlbumData } from "@/types/album";
+import { ISongData } from "@/types/song";
 import Image from "next/image";
 
-const fetchAlbumAndSongs = async (id: string) => {
+interface AlbumPageProps {
+    params: { id: string };
+}
+
+const fetchAlbumAndSongs = async (
+    id: string
+): Promise<{ albumData: IAlbumData; songs: ISongData[] } | null> => {
     if (id) {
         const { data: albumData, error: albumError } = await supaBaseInstence
             .from("albums")
-            .select("album_name, cover_image, artist, release_date")
+            .select("album_name, cover_image, artist, release_date,id")
             .eq("id", id)
             .single();
 
@@ -24,13 +33,10 @@ const fetchAlbumAndSongs = async (id: string) => {
 
         return { albumData, songs };
     }
+    return null;
 };
 
-export default async function AlbumPage({
-    params,
-}: {
-    params: Promise<{ id: string }>;
-}) {
+export default async function AlbumPage({ params }: AlbumPageProps) {
     const id = (await params).id;
     const albumInfo = await fetchAlbumAndSongs(id as string);
 
@@ -43,6 +49,7 @@ export default async function AlbumPage({
     }
 
     const { albumData, songs } = albumInfo;
+    console.log(albumData);
 
     return (
         <div className="px-6 py-8">
@@ -82,7 +89,7 @@ export default async function AlbumPage({
                     {songs?.map((song) => (
                         <div
                             key={song.id}
-                            className="p-4 bg-neutral-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                            className="relative group p-4 bg-neutral-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                         >
                             <h3 className="text-xl text-white font-semibold">
                                 {song.title}
@@ -90,6 +97,8 @@ export default async function AlbumPage({
                             <p className="text-sm text-gray-400 mt-1">
                                 {song.artist}
                             </p>
+
+                            <PlayButton audioUrl={song.audio_file} />
                         </div>
                     ))}
                 </div>

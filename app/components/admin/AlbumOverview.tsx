@@ -7,14 +7,7 @@ import { useModelStore } from "@/store/useModelStore";
 import Button from "../Button";
 import Modal from "../Modal";
 import EditAlbumForm from "../EditAlbumForm";
-
-export interface IAlbumData {
-    album_name: string;
-    artist: string;
-    cover_image: string;
-    id: string;
-    release_date: string;
-}
+import { IAlbumData } from "@/types/album";
 
 const AlbumOverview = () => {
     const [albums, setAlbums] = useState<IAlbumData[]>([]);
@@ -127,7 +120,9 @@ const AlbumOverview = () => {
                                     {album.artist}
                                 </td>
                                 <td className="py-2 px-4 text-white">
-                                    {album.release_date}
+                                    {new Date(
+                                        album.release_date
+                                    ).toLocaleDateString()}
                                 </td>
                                 <td className="py-2 px-4">
                                     <Image

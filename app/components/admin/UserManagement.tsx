@@ -3,13 +3,7 @@ import { supaBaseInstence } from "@/lib/supabaseClient";
 
 import Modal from "../Modal";
 import EditUserForm from "../EditUserForm";
-
-export interface IUserData {
-    id: string;
-    email: string;
-    username: string;
-    role: string;
-}
+import { IUserData } from "@/types/auth";
 
 const UserManagement = () => {
     const [users, setUsers] = useState<IUserData[]>([]);

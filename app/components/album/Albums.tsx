@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-import { IAlbumData } from "../admin/AlbumOverview";
+
 import AlbumLoader from "../Loader/AlbumLoader";
+import { IAlbumData } from "@/types/album";
 
 export default function Albums() {
     const [albums, setAlbums] = useState<IAlbumData[]>([]);

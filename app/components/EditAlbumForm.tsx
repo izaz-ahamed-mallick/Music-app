@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
 import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
-import { IAlbumData } from "./admin/AlbumOverview";
+import { IAlbumData } from "@/types/album";
 
 interface FormData {
     albumName: string;
@@ -30,7 +30,7 @@ const EditAlbumForm = ({
         defaultValues: {
             albumName: album.album_name,
             artist: album.artist,
-            releaseDate: album.release_date,
+            releaseDate: album.release_date.toISOString(),
             coverImage: null,
         },
     });
