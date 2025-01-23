@@ -37,7 +37,7 @@ const fetchAlbumAndSongs = async (
 };
 
 export default async function AlbumPage({ params }: AlbumPageProps) {
-    const { id } = await params;
+    const id = params.id;
     const albumInfo = await fetchAlbumAndSongs(id as string);
 
     if (!albumInfo) {
