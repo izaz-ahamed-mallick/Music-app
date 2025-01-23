@@ -22,7 +22,6 @@ const LoginPage = () => {
         formState: { errors },
     } = useForm<FormData>();
 
-    // Handle login submission
     const onSubmit = async (data: FormData) => {
         onLogin(data.email, data.password);
     };

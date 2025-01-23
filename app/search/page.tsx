@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-import PlayButton from "@/app/components/PlayButton"; // Adjust the import path as needed
+import PlayButton from "@/app/components/PlayButton";
 
 interface SearchResult {
     type: string;

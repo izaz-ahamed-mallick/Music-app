@@ -67,7 +67,6 @@ const AuthDropdown: React.FC = () => {
                 </div>
             )}
 
-            {/* Dropdown Menu */}
             {dropdownOpen && isAuthenticated && (
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-50">
                     <div className="py-2 px-4">

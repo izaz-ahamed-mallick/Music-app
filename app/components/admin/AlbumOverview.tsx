@@ -156,7 +156,6 @@ const AlbumOverview = () => {
                 </table>
             </div>
 
-            {/* Create Album Button */}
             <Button
                 onClick={openAlbumModal}
                 className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700"
@@ -164,7 +163,7 @@ const AlbumOverview = () => {
                 Create New Album
             </Button>
 
-            {/* Edit Album Modal */}
+            {/* Edit album model */}
 
             {isEditModalOpen && selectedAlbum && (
                 <Modal

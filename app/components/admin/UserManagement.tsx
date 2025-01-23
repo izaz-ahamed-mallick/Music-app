@@ -139,7 +139,6 @@ const UserManagement = () => {
                 </table>
             </div>
 
-            {/* Edit User Modal */}
             {isEditModalOpen && selectedUser && (
                 <Modal
                     isOpen={isEditModalOpen}

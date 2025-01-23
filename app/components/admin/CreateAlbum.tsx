@@ -142,7 +142,6 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
                     )}
                 </div>
 
-                {/* Submit Button */}
                 <div>
                     <Button
                         type="submit"

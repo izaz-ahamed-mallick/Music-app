@@ -18,7 +18,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
                 >
                     &times;
                 </button>
-                {/* Ensure modal content is scrollable if needed */}
+
                 {children}
             </div>
         </div>

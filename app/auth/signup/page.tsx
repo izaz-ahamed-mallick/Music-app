@@ -21,7 +21,6 @@ const SignUpPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const router = useRouter();
 
-    // Form submission handler
     const onSubmit = async (data: FormData) => {
         setLoading(true);
         setErrorMessage(null);

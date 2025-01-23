@@ -57,7 +57,6 @@ const Admin = () => {
                             <AlbumOverview />
                         </div>
 
-                        {/* User Management Card */}
                         <div className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-lg shadow-lg">
                             <h2 className="text-3xl font-semibold mb-4 text-white">
                                 User Management
@@ -67,26 +66,14 @@ const Admin = () => {
                             </p>
                             <UserManagement />
                         </div>
-
-                        {/* Settings Card */}
-                        {/* <div className="bg-gradient-to-br from-purple-600 to-pink-600 p-6 rounded-lg shadow-lg transform transition-all hover:scale-105 hover:shadow-2xl">
-                            <h2 className="text-3xl font-semibold mb-4 text-white">
-                                Settings
-                            </h2>
-                            <p className="text-gray-200 text-lg">
-                                Configure app settings and preferences.
-                            </p>
-                        </div> */}
                     </div>
                 </div>
             </div>
 
-            {/* Modal for Album Creation */}
             <Modal isOpen={isAlbumModalOpen} onClose={closeAlbumModal}>
                 <CreateAlbum onClose={closeAlbumModal} />
             </Modal>
 
-            {/* Modal for Song Creation */}
             <Modal isOpen={isSongModalOpen} onClose={closeSongModal}>
                 <CreateSong onClose={closeSongModal} />
             </Modal>

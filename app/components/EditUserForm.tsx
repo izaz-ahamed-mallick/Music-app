@@ -31,7 +31,6 @@ const EditUserForm = ({
         },
     });
 
-    // Handle form submission
     const onSubmit = async (data: FormData) => {
         const { email, role, username } = data;
 
