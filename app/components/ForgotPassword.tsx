@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 
@@ -16,7 +17,15 @@ const ForgotPassword: React.FC<IForgotPasswordProps> = ({ onClose }) => {
         formState: { errors },
     } = useForm<IForgotPassData>();
 
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
+    const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
     const onSubmit = async (data: IForgotPassData) => {
+        setLoading(true);
+        setErrorMessage(null);
+        setSuccessMessage(null);
+
         const { email } = data;
 
         const { error } = await supaBaseInstence.auth.resetPasswordForEmail(
@@ -26,11 +35,13 @@ const ForgotPassword: React.FC<IForgotPasswordProps> = ({ onClose }) => {
             }
         );
 
+        setLoading(false);
+
         if (error) {
-            console.error("Error resetting password:", error.message);
+            setErrorMessage(error.message);
         } else {
+            setSuccessMessage("Password reset email sent!");
             onClose();
-            alert("Password reset email sent!");
         }
     };
 
@@ -43,7 +54,14 @@ const ForgotPassword: React.FC<IForgotPasswordProps> = ({ onClose }) => {
             <div>
                 <input
                     type="email"
-                    {...register("email", { required: "Email is required" })}
+                    aria-label="Email"
+                    {...register("email", {
+                        required: "Email is required",
+                        pattern: {
+                            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                            message: "Invalid email format",
+                        },
+                    })}
                     className="w-full p-3 border border-gray-300 rounded-md text-sm"
                     placeholder="Enter your email"
                 />
@@ -54,12 +72,24 @@ const ForgotPassword: React.FC<IForgotPasswordProps> = ({ onClose }) => {
                 )}
             </div>
 
+            {errorMessage && (
+                <p className="text-red-500 text-xs mt-2">{errorMessage}</p>
+            )}
+            {successMessage && (
+                <p className="text-green-500 text-xs mt-2">{successMessage}</p>
+            )}
+
             <div>
                 <button
                     type="submit"
-                    className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none"
+                    disabled={loading}
+                    className={`w-full p-3 rounded-md focus:outline-none ${
+                        loading
+                            ? "bg-gray-400"
+                            : "bg-blue-500 hover:bg-blue-600 text-white"
+                    }`}
                 >
-                    Send Reset Link
+                    {loading ? "Sending..." : "Send Reset Link"}
                 </button>
             </div>
         </form>
