@@ -3,7 +3,7 @@ import Header from "./components/Header";
 
 export default function Home() {
     return (
-        <div className="bg-neutral-800 rounded-lg h-full w-full overflow-hidden overflow-y-auto ">
+        <div className=" rounded-lg h-full w-full overflow-hidden overflow-y-auto ">
             <Header>
                 <div className="mb-2">
                     <h1 className="text-3xl mb-4 font-semibold text-white">

@@ -6,8 +6,9 @@ import Image from "next/image";
 import { useModelStore } from "@/store/useModelStore";
 import Button from "../Button";
 import Modal from "../Modal";
-import EditAlbumForm from "../EditAlbumForm";
+
 import { IAlbumData } from "@/types/album";
+import EditAlbumForm from "../album/EditAlbumForm";
 
 const AlbumOverview = () => {
     const [albums, setAlbums] = useState<IAlbumData[]>([]);
@@ -69,7 +70,7 @@ const AlbumOverview = () => {
     };
 
     return (
-        <div className="p-6 w-full bg-gray-800 rounded-lg shadow-lg">
+        <div className="p-6 w-full bg-gray-800 rounded-lg shadow-lg ">
             <h2 className="text-2xl font-semibold text-white mb-4">
                 Albums Overview
             </h2>

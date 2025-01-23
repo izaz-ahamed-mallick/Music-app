@@ -49,7 +49,6 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
     }
 
     const { albumData, songs } = albumInfo;
-    console.log(albumData);
 
     return (
         <div className="px-6 py-8">
@@ -86,21 +85,34 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
                     Songs in this Album
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {songs?.map((song) => (
-                        <div
-                            key={song.id}
-                            className="relative group p-4 bg-neutral-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-                        >
-                            <h3 className="text-xl text-white font-semibold">
-                                {song.title}
-                            </h3>
-                            <p className="text-sm text-gray-400 mt-1">
-                                {song.artist}
-                            </p>
+                    {songs.length > 0 ? (
+                        songs.map((song) => (
+                            <div
+                                key={song.id}
+                                className="relative group p-4 bg-neutral-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                            >
+                                <div>
+                                    <h3 className="text-xl text-white font-semibold">
+                                        {song.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-400 mt-1">
+                                        {song.artist}
+                                    </p>
+                                </div>
 
-                            <PlayButton audioUrl={song.audio_file} />
-                        </div>
-                    ))}
+                                <PlayButton
+                                    artist={song.artist}
+                                    audioUrl={song.audio_file}
+                                    id={song.id}
+                                    title={song.title}
+                                />
+                            </div>
+                        ))
+                    ) : (
+                        <p className="text-gray-400">
+                            No songs available for this album
+                        </p>
+                    )}
                 </div>
             </div>
         </div>

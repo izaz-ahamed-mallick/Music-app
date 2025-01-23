@@ -45,10 +45,9 @@ const Admin = () => {
                         </div>
                     </div>
 
-                    {/* Admin Dashboard Overview */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 space-y-10">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 space-y-10 ">
                         {/* Album Overview Card */}
-                        <div className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-lg shadow-lg transform transition-all ">
+                        <div className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-lg shadow-lg ">
                             <h2 className="text-3xl font-semibold mb-4 text-white">
                                 Albums Overview
                             </h2>

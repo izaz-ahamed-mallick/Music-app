@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
-import useCreateUrlFromStorage from "../hooks/useCreateUrlFromStorage";
+
 import { IAlbumData } from "@/types/album";
+import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
 
 interface FormData {
     albumName: string;
