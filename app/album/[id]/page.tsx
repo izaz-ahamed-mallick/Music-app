@@ -52,7 +52,6 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
 
     return (
         <div className="px-6 py-8">
-            {/* Album Info Section */}
             <div className="flex items-center gap-6 mb-8">
                 <div className="relative w-48 h-48 rounded-lg overflow-hidden shadow-lg">
                     <Image
