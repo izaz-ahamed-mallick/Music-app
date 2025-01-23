@@ -21,6 +21,8 @@ const AuthDropdown: React.FC = () => {
 
     const toggleDropdown = () => setDropdownOpen((prev) => !prev);
 
+    console.log("role", role);
+
     const handleLogout = () => {
         Cookies.remove("access_token");
         setAuth(false);
@@ -44,7 +46,7 @@ const AuthDropdown: React.FC = () => {
                     onClick={toggleDropdown}
                     className="flex items-center gap-x-2 bg-white font-medium text-black p-2 rounded-lg hover:bg-gray-200"
                 >
-                    {role ? `${role === "user" ? "User" : "Admin"}` : "Profile"}
+                    {role && `${role === "user" ? "User" : "Admin"}`}
                 </button>
             ) : (
                 <div className="flex justify-between items-center gap-x-4">
@@ -71,7 +73,7 @@ const AuthDropdown: React.FC = () => {
                 <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-50">
                     <div className="py-2 px-4">
                         <p className="text-sm text-gray-700">
-                            {role === "user" ? "User" : "Admin"}
+                            {role == "user" ? "User" : "Admin"}
                         </p>
                         {role === "admin" && (
                             <button

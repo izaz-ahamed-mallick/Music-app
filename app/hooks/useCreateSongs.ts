@@ -1,4 +1,5 @@
 import { supaBaseInstence } from "@/lib/supabaseClient";
+import { toast } from "react-toastify";
 
 interface ICreateSongForm {
     title: string;
@@ -12,23 +13,21 @@ const useCreateSongs = () => {
     const createSongs = async (data: ICreateSongForm) => {
         const { album_id, artist, audio_file_url, title } = data;
 
-        const { data: songData, error } = await supaBaseInstence
-            .from("songs")
-            .insert([
-                {
-                    title,
-                    artist,
-                    album_id: album_id,
+        const { error } = await supaBaseInstence.from("songs").insert([
+            {
+                title,
+                artist,
+                album_id: album_id,
 
-                    audio_file: audio_file_url,
-                },
-            ]);
+                audio_file: audio_file_url,
+            },
+        ]);
 
         if (error) {
-            console.error("Error creating song:", error);
+            toast.error("Error creating song");
             return;
         } else {
-            console.log("Songs created successfully:", songData);
+            toast.success("Songs created successfully");
             return true;
         }
     };

@@ -5,6 +5,7 @@ import Image from "next/image";
 
 import { IAlbumData } from "@/types/album";
 import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
+import { toast } from "react-toastify";
 
 interface FormData {
     albumName: string;
@@ -31,7 +32,9 @@ const EditAlbumForm = ({
         defaultValues: {
             albumName: album.album_name,
             artist: album.artist,
-            releaseDate: album.release_date.toISOString(),
+            releaseDate: album.release_date
+                ? new Date(album.release_date).toISOString().split("T")[0]
+                : "",
             coverImage: null,
         },
     });
@@ -45,11 +48,10 @@ const EditAlbumForm = ({
     const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         if (file) {
-            setCoverImagePreview(URL.createObjectURL(file)); // Show preview of the selected image
+            setCoverImagePreview(URL.createObjectURL(file));
         }
     };
 
-    // Handle form submission
     const onSubmit = async (data: FormData) => {
         if (
             (data.coverImage && data.coverImage.length > 0) ||
@@ -75,6 +77,7 @@ const EditAlbumForm = ({
             if (error) {
                 console.error("Error updating album:", error.message);
             } else {
+                toast.success("Album update successfully");
                 onSave();
                 onClose();
             }

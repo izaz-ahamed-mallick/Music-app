@@ -94,7 +94,8 @@ const Search = () => {
                                     <div
                                         key={item.id || item.artist}
                                         onClick={
-                                            group.type === "Albums"
+                                            group.type === "Albums" ||
+                                            group.type === "Artists"
                                                 ? () =>
                                                       handleAlbumClick(
                                                           item.id || ""

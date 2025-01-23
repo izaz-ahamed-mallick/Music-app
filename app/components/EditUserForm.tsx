@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { IUserData } from "@/types/auth";
+import { toast } from "react-toastify";
 
 interface FormData {
     username: string;
@@ -47,8 +48,9 @@ const EditUserForm = ({
                 .select();
 
             if (error) {
-                console.error("Error updating album:", error.message);
+                toast.error("Error updating album");
             } else {
+                toast.update("User update successfully!");
                 onSave();
                 onClose();
             }
