@@ -40,9 +40,6 @@ export async function middleware(req: NextRequest) {
             .eq("id", user?.id)
             .single(); // Ensures exactly one row is returned
 
-        console.log("Roles Data:", roles);
-        console.log("Role Error:", roleError);
-
         if (roleError || !roles) {
             console.log("Role not found:", roles);
             return NextResponse.redirect(new URL("/", req.url));
