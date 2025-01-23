@@ -37,7 +37,7 @@ const fetchAlbumAndSongs = async (
 };
 
 export default async function AlbumPage({ params }: AlbumPageProps) {
-    const id = (await params).id;
+    const { id } = await params;
     const albumInfo = await fetchAlbumAndSongs(id as string);
 
     if (!albumInfo) {
@@ -60,6 +60,9 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
                         src={albumData.cover_image}
                         alt={albumData.album_name}
                         fill
+                        sizes="(max-width: 768px) 100vw, 
+               (max-width: 1200px) 50vw, 
+               33vw"
                         className="object-cover"
                     />
                 </div>

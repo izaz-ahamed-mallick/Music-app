@@ -42,6 +42,7 @@ export default function Albums() {
                         <a>
                             <div className="relative w-full h-72 bg-neutral-700 rounded-lg overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
                                 <Image
+                                    priority
                                     width={500}
                                     height={500}
                                     src={album.cover_image}
