@@ -16,7 +16,7 @@ const AlbumOverview = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedAlbum, setSelectedAlbum] = useState<IAlbumData | null>(null);
     const fetchAlbumRef = useRef<() => Promise<void> | null>(null);
-    const { openAlbumModal } = useModelStore();
+    const { openAlbumModal, isAlbumModalOpen } = useModelStore();
 
     useEffect(() => {
         fetchAlbumRef.current = async () => {
@@ -31,7 +31,7 @@ const AlbumOverview = () => {
         };
 
         fetchAlbumRef.current();
-    }, []);
+    }, [isAlbumModalOpen]);
 
     const filteredAlbums = albums.filter(
         (album) =>
@@ -52,7 +52,9 @@ const AlbumOverview = () => {
 
     const handleSaveChanges = () => {
         setIsEditModalOpen(false);
-        if (fetchAlbumRef.current) fetchAlbumRef.current();
+        if (fetchAlbumRef.current) {
+            fetchAlbumRef.current();
+        }
     };
 
     const handleDeleteAlbum = async (albumId: string) => {

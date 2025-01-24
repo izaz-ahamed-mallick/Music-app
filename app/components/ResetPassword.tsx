@@ -3,60 +3,50 @@ import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const ResetPassword = () => {
+    const [newPassword, setNewPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
     const router = useRouter();
 
-    const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const handlePasswordReset = async () => {
+        if (!newPassword) {
+            toast.error("Please enter a new password.");
+            return;
+        }
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        setLoading(true);
+        const { error } = await supaBaseInstence.auth.updateUser({
+            password: newPassword,
+        });
+        setLoading(false);
 
-        try {
-            setLoading(true);
-
-            const { error: resetError } =
-                await supaBaseInstence.auth.updateUser({
-                    password,
-                });
-
-            if (resetError) {
-                setError(`Error resetting password: ${resetError.message}`);
-                console.error(resetError.message);
-            } else {
-                alert("Password reset successful!");
-                router.push("/login");
-            }
-        } catch (err) {
-            setError(`An error occurred`);
-            console.error("An error occurred:", err);
-        } finally {
-            setLoading(false);
+        if (error) {
+            setMessage(`Error: ${error.message}`);
+            toast.error(error.message);
+        } else {
+            setMessage("Password updated successfully!");
+            toast.success("Password updated successfully!");
+            router.push("/auth/login");
         }
     };
 
     return (
         <div>
-            <h2>Reset Your Password</h2>
-            {error && <p className="text-red-500">{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="password"
-                    placeholder="Enter your new password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="p-2 border border-gray-300 rounded"
-                />
-                <button
-                    type="submit"
-                    disabled={loading}
-                    className="mt-4 p-2 bg-blue-500 text-white rounded"
-                >
-                    {loading ? "Resetting..." : "Reset Password"}
-                </button>
-            </form>
+            <h1>Reset Password</h1>
+            <input
+                type="password"
+                placeholder="Enter new password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+            />
+            <button onClick={handlePasswordReset} disabled={loading}>
+                {loading ? "Updating..." : "Update Password"}
+            </button>
+            {message && <p>{message}</p>}
         </div>
     );
 };

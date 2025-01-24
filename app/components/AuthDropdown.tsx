@@ -1,5 +1,3 @@
-// components/AuthDropdown.tsx
-
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
@@ -7,6 +5,8 @@ import Cookies from "js-cookie";
 import Button from "./Button";
 import useUserRoleStore from "@/store/userRoleStore";
 import { useUserAuth } from "@/store/useUserAuth";
+import { supaBaseInstence } from "@/lib/supabaseClient";
+import { useMusicPlayerStore } from "@/store/useMusicPlayerStore";
 
 const AuthDropdown: React.FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -14,19 +14,32 @@ const AuthDropdown: React.FC = () => {
     const { isAuthenticated, setAuth } = useUserAuth();
     const router = useRouter();
     const [isClient, setIsClient] = useState(false);
+    const { stopPlayback, setCurrentSongNull } = useMusicPlayerStore();
 
     useEffect(() => {
         setIsClient(true);
     }, []);
 
     const toggleDropdown = () => setDropdownOpen((prev) => !prev);
+    const handleLogout = async () => {
+        try {
+            const { error } = await supaBaseInstence.auth.signOut();
 
-    console.log("role", role);
+            if (error) {
+                console.error("Error during logout:", error.message);
+                return;
+            }
 
-    const handleLogout = () => {
-        Cookies.remove("access_token");
-        setAuth(false);
-        router.push("/auth/login");
+            Cookies.remove("access_token");
+
+            setAuth(false);
+            stopPlayback();
+            setCurrentSongNull();
+
+            router.push("/auth/login");
+        } catch (err) {
+            console.error("Unexpected error during logout:", err);
+        }
     };
 
     const handleSignUpClick = () => {

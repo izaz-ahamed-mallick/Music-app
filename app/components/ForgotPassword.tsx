@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
+import { toast } from "react-toastify";
 
 interface IForgotPassData {
     email: string;
@@ -41,6 +42,7 @@ const ForgotPassword: React.FC<IForgotPasswordProps> = ({ onClose }) => {
             setErrorMessage(error.message);
         } else {
             setSuccessMessage("Password reset email sent!");
+            toast.success("Password reset email sent!");
 
             onClose();
         }
