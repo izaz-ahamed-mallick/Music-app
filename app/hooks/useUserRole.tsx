@@ -15,7 +15,7 @@ const useUserRole = () => {
     const checkUserRole = async (userId: string) => {
         const { data, error } = await supaBaseInstence
             .from("users")
-            .select("role")
+            .select("role,username,id")
             .eq("id", userId)
             .single();
 
@@ -23,7 +23,8 @@ const useUserRole = () => {
             console.error("Error fetching user role:", error);
             return null;
         }
-        return data.role;
+        console.log("User data", data);
+        return data;
     };
 
     const onLogin = async (email: string, password: string) => {
@@ -60,8 +61,14 @@ const useUserRole = () => {
                     }
                 );
                 setAuth(true);
-                const role = await checkUserRole(userData.user?.id);
-                setRole(role);
+                const data = await checkUserRole(userData.user?.id);
+                if (data) {
+                    setRole({
+                        display_name: data.username,
+                        id: data.id,
+                        role: data.role,
+                    });
+                }
 
                 router.push("/");
             }

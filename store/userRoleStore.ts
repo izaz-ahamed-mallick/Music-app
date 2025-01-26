@@ -1,16 +1,32 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface IUserRole {
+interface IUser {
+    id: string | null;
     role: string | null;
-    setRole: (userRole: string) => void;
+    display_name: string | null;
 }
 
-const useUserRoleStore = create<IUserRole>()(
+interface IUserRoleStore {
+    user: IUser;
+    setRole: (user: IUser) => void;
+    removeUserDetails: () => void;
+}
+
+const useUserRoleStore = create<IUserRoleStore>()(
     persist(
         (set) => ({
-            role: null,
-            setRole: (userRole: string) => set({ role: userRole }),
+            user: { id: null, role: null, display_name: null },
+            setRole: (user: IUser) =>
+                set({
+                    user: {
+                        id: user.id,
+                        role: user.role,
+                        display_name: user.display_name,
+                    },
+                }),
+            removeUserDetails: () =>
+                set({ user: { id: null, role: null, display_name: null } }),
         }),
         {
             name: "user-role",

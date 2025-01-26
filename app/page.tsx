@@ -1,4 +1,5 @@
 import Albums from "./components/album/Albums";
+import GreetingsPage from "./components/GreetingsPage";
 import Header from "./components/Header";
 
 export default function Home() {
@@ -6,9 +7,7 @@ export default function Home() {
         <div className=" rounded-lg h-full w-full overflow-hidden overflow-y-auto ">
             <Header>
                 <div className="mb-2">
-                    <h1 className="text-3xl mb-4 font-semibold text-white">
-                        Welcome Back!
-                    </h1>
+                    <GreetingsPage />
                 </div>
             </Header>
             <div className="mt-1 mb-6 px-6">
