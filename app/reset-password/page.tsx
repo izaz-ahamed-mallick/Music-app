@@ -9,9 +9,17 @@ import { toast } from "react-toastify";
 const ResetPasswordPage = () => {
     const router = useRouter();
     const [isTokenValid, setIsTokenValid] = useState<boolean | null>(null);
-    const hash = window.location.hash;
+    const [isClient, setIsClient] = useState(false); // Add a state to track client-side rendering
 
     useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    useEffect(() => {
+        if (!isClient) return;
+
+        const hash = window.location.hash;
+
         if (hash && hash.includes("access_token")) {
             const params = new URLSearchParams(hash.substring(1));
             const accessToken = params.get("access_token");
@@ -31,7 +39,7 @@ const ResetPasswordPage = () => {
         } else {
             setIsTokenValid(false);
         }
-    }, [router, hash]);
+    }, [isClient, router]);
 
     if (isTokenValid === null) {
         return <p>Loading...</p>;
