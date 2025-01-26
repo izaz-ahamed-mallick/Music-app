@@ -7,6 +7,7 @@ import useUserRoleStore from "@/store/userRoleStore";
 import { useUserAuth } from "@/store/useUserAuth";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useMusicPlayerStore } from "@/store/useMusicPlayerStore";
+import { useAddedAlbumStore } from "@/store/useAddedAlbumStore";
 
 const AuthDropdown: React.FC = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -16,6 +17,7 @@ const AuthDropdown: React.FC = () => {
     const [isClient, setIsClient] = useState(false);
     const { stopPlayback, setCurrentSongNull } = useMusicPlayerStore();
     const { removeUserDetails } = useUserRoleStore();
+    const { removeFavoriteonLogOut } = useAddedAlbumStore();
 
     useEffect(() => {
         setIsClient(true);
@@ -37,6 +39,7 @@ const AuthDropdown: React.FC = () => {
             stopPlayback();
             setCurrentSongNull();
             removeUserDetails();
+            removeFavoriteonLogOut();
 
             router.push("/auth/login");
         } catch (err) {

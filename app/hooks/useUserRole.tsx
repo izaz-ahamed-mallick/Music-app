@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import useUserRoleStore from "@/store/userRoleStore";
 import Cookies from "js-cookie";
 import { useUserAuth } from "@/store/useUserAuth";
+import { useAddedAlbumStore } from "@/store/useAddedAlbumStore";
 
 const useUserRole = () => {
     const [loading, setLoading] = useState(false);
@@ -11,6 +12,7 @@ const useUserRole = () => {
     const router = useRouter();
     const { setRole } = useUserRoleStore();
     const { setAuth } = useUserAuth();
+    const { fetchFavoriteAlbum } = useAddedAlbumStore();
 
     const checkUserRole = async (userId: string) => {
         const { data, error } = await supaBaseInstence
@@ -68,6 +70,8 @@ const useUserRole = () => {
                         id: data.id,
                         role: data.role,
                     });
+
+                    fetchFavoriteAlbum(data.id);
                 }
 
                 router.push("/");
