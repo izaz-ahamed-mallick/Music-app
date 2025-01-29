@@ -7,6 +7,7 @@ import { BiSearch } from "react-icons/bi";
 import Box from "./Box";
 import Link from "next/link";
 import FavoriteAlbums from "./album/FavoriteAlbums";
+import Image from "next/image";
 
 interface SideBarProps {
     children: React.ReactNode;
@@ -36,6 +37,19 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
             <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[250px] p-2">
                 <Box>
                     <div className="flex flex-col gap-y-4 px-5 py-4">
+                        <div className="flex items-center gap-x-2 mb-2">
+                            <Image
+                                width={50}
+                                height={50}
+                                src="/logo.png"
+                                alt="Melodify Logo"
+                                className="rounded-full object-cover"
+                            />
+                            <h1 className="text-xl font-semibold text-green-600">
+                                Melodify
+                            </h1>
+                        </div>
+
                         {routes.map((route) => (
                             <Link
                                 href={route.href}
@@ -44,12 +58,13 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
                                     route.active && "text-white"
                                 }`}
                             >
-                                {<route.icon size={26} />}
+                                <route.icon size={26} />
                                 <p className="truncate w-full">{route.label}</p>
                             </Link>
                         ))}
                     </div>
                 </Box>
+
                 <Box className="overflow-y-auto h-full">
                     <h1 className="text-xl font-medium  my-2 p-2">
                         Favorite Albums
