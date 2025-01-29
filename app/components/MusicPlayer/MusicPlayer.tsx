@@ -6,39 +6,51 @@ import { IoVolumeHigh, IoVolumeOff } from "react-icons/io5";
 import WaveSurfer from "wavesurfer.js";
 import { useMusicPlayerStore } from "@/store/useMusicPlayerStore";
 import Image from "next/image";
-import { useUserAuth } from "@/store/useUserAuth";
 
 const MusicPlayer = () => {
     const { currentSong, isPlaying, togglePlay, stopPlayback } =
         useMusicPlayerStore();
 
-    const { isAuthenticated } = useUserAuth();
-
     const [volume, setVolume] = useState(0.5);
     const waveformRef = useRef<HTMLDivElement | null>(null);
     const waveSurferInstance = useRef<WaveSurfer | null>(null);
 
+    const volumeRef = useRef(volume);
+
     useEffect(() => {
-        if (waveformRef.current && currentSong?.audioUrl) {
-            waveSurferInstance.current = WaveSurfer.create({
-                container: waveformRef.current,
-                waveColor: "#ddd",
-                progressColor: "#4caf50",
-                cursorColor: "#fff",
-                barWidth: 2,
-                barRadius: 1,
+        volumeRef.current = volume;
+    }, [volume]);
 
-                height: 50,
-                normalize: true,
-                backend: "MediaElement",
-            });
+    useEffect(() => {
+        if (!waveformRef.current || !currentSong?.audioUrl) return;
 
-            waveSurferInstance.current.load(currentSong.audioUrl);
-
-            waveSurferInstance.current.on("finish", () => {
-                stopPlayback();
-            });
+        if (waveSurferInstance.current) {
+            waveSurferInstance.current.destroy();
         }
+
+        waveSurferInstance.current = WaveSurfer.create({
+            container: waveformRef.current,
+            waveColor: "#ddd",
+            progressColor: "#4caf50",
+            cursorColor: "#fff",
+            barWidth: 2,
+            barRadius: 1,
+            height: 50,
+            normalize: true,
+            backend: "MediaElement",
+        });
+
+        waveSurferInstance.current.load(currentSong.audioUrl);
+
+        waveSurferInstance.current.on("ready", () => {
+            waveSurferInstance.current?.setVolume(volumeRef.current);
+
+            waveSurferInstance.current?.play();
+        });
+
+        waveSurferInstance.current.on("finish", () => {
+            stopPlayback();
+        });
 
         return () => {
             waveSurferInstance.current?.destroy();
@@ -57,11 +69,11 @@ const MusicPlayer = () => {
 
     useEffect(() => {
         if (waveSurferInstance.current) {
-            waveSurferInstance.current.setVolume(volume);
+            waveSurferInstance.current.setVolume(volumeRef.current); // Always use ref value
         }
-    }, [volume]);
+    }, [volume]); // Update volume without affecting song loading
 
-    if (!isAuthenticated || !currentSong) return null;
+    if (!currentSong) return null;
 
     return (
         <div className="fixed bottom-0 left-0 w-full bg-neutral-800 text-white p-4 shadow-lg flex flex-col sm:flex-row items-center justify-between z-50">

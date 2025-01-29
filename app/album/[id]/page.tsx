@@ -1,8 +1,10 @@
+import { Suspense } from "react";
 import PlayButton from "@/app/components/PlayButton";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { IAlbumData } from "@/types/album";
 import { ISongData } from "@/types/song";
 import Image from "next/image";
+import AlbumPageLoader from "@/app/components/Loader/AlbumPageLoader";
 
 interface AlbumPageProps {
     params: { id: string };
@@ -36,9 +38,22 @@ const fetchAlbumAndSongs = async (
     return null;
 };
 
-export default async function AlbumPage({ params }: AlbumPageProps) {
+export default function AlbumPage({ params }: AlbumPageProps) {
     const id = params.id;
-    const albumInfo = await fetchAlbumAndSongs(id as string);
+
+    return (
+        <Suspense fallback={<AlbumPageLoader />}>
+            <AlbumContent id={id} />
+        </Suspense>
+    );
+}
+
+interface AlbumContentProps {
+    id: string;
+}
+
+async function AlbumContent({ id }: AlbumContentProps) {
+    const albumInfo = await fetchAlbumAndSongs(id);
 
     if (!albumInfo) {
         return (
@@ -59,9 +74,7 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
                         src={albumData.cover_image}
                         alt={albumData.album_name}
                         fill
-                        sizes="(max-width: 768px) 100vw, 
-               (max-width: 1200px) 50vw, 
-               33vw"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover"
                     />
                 </div>
@@ -91,23 +104,25 @@ export default async function AlbumPage({ params }: AlbumPageProps) {
                         songs.map((song) => (
                             <div
                                 key={song.id}
-                                className="relative group p-4 bg-neutral-800 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
+                                className="relative group p-4 bg-neutral-800 hover:bg-neutral-900 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
                             >
-                                <div>
-                                    <h3 className="text-xl text-white font-semibold">
-                                        {song.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-400 mt-1">
-                                        {song.artist}
-                                    </p>
-                                </div>
+                                <div className="flex justify-between items-center">
+                                    <div>
+                                        <h3 className="text-xl text-white font-semibold">
+                                            {song.title}
+                                        </h3>
+                                        <p className="text-sm text-gray-400 mt-1">
+                                            {song.artist}
+                                        </p>
+                                    </div>
 
-                                <PlayButton
-                                    artist={song.artist}
-                                    audioUrl={song.audio_file}
-                                    id={song.id}
-                                    title={song.title}
-                                />
+                                    <PlayButton
+                                        artist={song.artist}
+                                        audioUrl={song.audio_file}
+                                        id={song.id}
+                                        title={song.title}
+                                    />
+                                </div>
                             </div>
                         ))
                     ) : (

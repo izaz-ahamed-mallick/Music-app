@@ -14,11 +14,11 @@ if (!supaBaseUrl || !supaBaseAnonKey) {
 export const supaBaseInstence = createClient(supaBaseUrl, supaBaseAnonKey);
 
 // Server-side client instance (service role key)
-if (!supaBaseServiceKey) {
-    console.warn(
-        "Supabase Service Role Key is not defined. This is required for server-side operations."
-    );
-}
+// if (!supaBaseServiceKey) {
+//     console.warn(
+//         "Supabase Service Role Key is not defined. This is required for server-side operations."
+//     );
+// }
 export const supabaseServerClient = supaBaseServiceKey
     ? createClient(supaBaseUrl, supaBaseServiceKey)
     : null;

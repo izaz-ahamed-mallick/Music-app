@@ -20,7 +20,8 @@ const FavoriteAlbums = () => {
                                     height={20}
                                     src={album.cover_image}
                                     alt={album.album_name}
-                                    className=" object-cover rounded-md"
+                                    className="object-cover rounded-md"
+                                    style={{ width: "auto", height: "auto" }} // Ensure aspect ratio is preserved
                                 />
                                 <p className="text-lg font-medium">
                                     {album.album_name}
