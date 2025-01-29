@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Button from "../components/Button";
-import Header from "../components/Header";
+
 import Modal from "../components/Modal";
 
 import { useModelStore } from "@/store/useModelStore";
@@ -20,7 +20,7 @@ const Admin = () => {
     const closeSongModal = () => setIsSongModalOpen(false);
 
     return (
-        <Header>
+        <>
             <div className="min-h-screen bg-gray-900 text-white p-8">
                 <div className="max-w-7xl mx-auto space-y-12">
                     <div className="flex justify-between items-center mb-8">
@@ -77,7 +77,7 @@ const Admin = () => {
             <Modal isOpen={isSongModalOpen} onClose={closeSongModal}>
                 <CreateSong onClose={closeSongModal} />
             </Modal>
-        </Header>
+        </>
     );
 };
 
