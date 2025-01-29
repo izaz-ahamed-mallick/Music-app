@@ -33,7 +33,7 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
             if (error) {
                 console.error("Error fetching albums:", error.message);
             } else {
-                setAlbums(data); // Store fetched albums in state
+                setAlbums(data);
             }
         };
 
