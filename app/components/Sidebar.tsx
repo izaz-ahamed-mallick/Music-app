@@ -45,7 +45,7 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
                                 alt="Melodify Logo"
                                 className="rounded-full object-cover"
                             />
-                            <h1 className="text-xl font-semibold text-green-600">
+                            <h1 className="text-2xl font-bold text-green-600">
                                 Melodify
                             </h1>
                         </div>

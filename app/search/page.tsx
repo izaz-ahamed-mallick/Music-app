@@ -42,7 +42,7 @@ const Search = () => {
 
             const { data: artists } = await supaBaseInstence
                 .from("albums")
-                .select("artist")
+                .select("id,artist")
                 .ilike("artist", `%${term}%`)
                 .limit(10);
 
@@ -103,7 +103,8 @@ const Search = () => {
                                                 : undefined
                                         }
                                         className={`p-2 bg-neutral-800 rounded-lg mb-2 ${
-                                            group.type === "Albums"
+                                            group.type === "Albums" ||
+                                            group.type === "Artists"
                                                 ? "cursor-pointer hover:bg-neutral-700 transition"
                                                 : ""
                                         }`}

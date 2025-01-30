@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-    title: "Music Player App",
+    title: "  Melodify-Music Player App",
     description: "Enjoy your music with a modern player",
 };
 
