@@ -9,6 +9,7 @@ import Modal from "../Modal";
 
 import { IAlbumData } from "@/types/album";
 import EditAlbumForm from "../album/EditAlbumForm";
+import useAlbumDelete from "@/app/hooks/useAlbumDelete";
 
 const AlbumOverview = () => {
     const [albums, setAlbums] = useState<IAlbumData[]>([]);
@@ -17,6 +18,7 @@ const AlbumOverview = () => {
     const [selectedAlbum, setSelectedAlbum] = useState<IAlbumData | null>(null);
     const fetchAlbumRef = useRef<() => Promise<void> | null>(null);
     const { openAlbumModal, isAlbumModalOpen } = useModelStore();
+    const { handleDeleteAlbum, loading } = useAlbumDelete(albums, setAlbums);
 
     useEffect(() => {
         fetchAlbumRef.current = async () => {
@@ -57,18 +59,8 @@ const AlbumOverview = () => {
         }
     };
 
-    const handleDeleteAlbum = async (albumId: string) => {
-        const { error } = await supaBaseInstence
-            .from("albums")
-            .delete()
-            .match({ id: albumId });
-        if (error) {
-            console.error("Error deleting album:", error.message);
-        } else {
-            setAlbums((prevAlbums) =>
-                prevAlbums.filter((album) => album.id !== albumId)
-            );
-        }
+    const handleAlbumDelete = (id: string) => {
+        handleDeleteAlbum(id);
     };
 
     return (
@@ -145,11 +137,12 @@ const AlbumOverview = () => {
                                     </button>
                                     <button
                                         onClick={() =>
-                                            handleDeleteAlbum(album.id)
+                                            handleAlbumDelete(album.id)
                                         }
+                                        disabled={loading}
                                         className="text-red-500 hover:underline"
                                     >
-                                        Delete
+                                        {loading ? "Deleting..." : "Delete"}
                                     </button>
                                 </td>
                             </tr>

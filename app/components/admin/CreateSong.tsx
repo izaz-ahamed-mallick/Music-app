@@ -128,7 +128,7 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                         })}
                         className="w-full p-2 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
-                        <option disabled className="text-black " value="">
+                        <option className="text-black " value="">
                             Select an Album
                         </option>
                         {albums.map((album) => (
