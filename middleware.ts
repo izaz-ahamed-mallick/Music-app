@@ -15,11 +15,13 @@ export async function middleware(req: NextRequest) {
 
     // ✅ If token is expired, clear token and redirect to login page
     if (token && isTokenExpired(token)) {
-        const response = NextResponse.redirect(new URL("/auth/login", req.url));
+        const url = new URL("/auth/login", req.url);
+        url.searchParams.set("sessionExpired", "true");
+
+        const response = NextResponse.redirect(url);
         response.cookies.delete("access_token");
         return response;
     }
-
     // ✅ Admin route protection
     if (pathname.startsWith("/admin")) {
         const {

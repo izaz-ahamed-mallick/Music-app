@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import MusicPlayer from "./components/MusicPlayer/MusicPlayer";
 import { ToastContainer } from "react-toastify";
 
 import Head from "next/head";
 
 import ClientLayout from "./components/layout/clientLayout";
+import MusicPlayer from "./components/MusicPlayer/MusicPlayer";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -49,7 +49,7 @@ export default function RootLayout({
                     />
                 </Head>
                 <ClientLayout>{children}</ClientLayout>
-                <div className="fixed bottom-0 left-0 w-full">
+                <div className="fixed bottom-0 left-0 md:left-[250px] right-4 p-2">
                     <MusicPlayer />
                 </div>
                 <ToastContainer />

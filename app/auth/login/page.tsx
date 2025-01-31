@@ -3,9 +3,12 @@
 import { useForm } from "react-hook-form";
 
 import useUserRole from "@/app/hooks/useUserRole";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/app/components/Modal";
 import ForgotPassword from "@/app/components/ForgotPassword";
+
+import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 interface FormData {
     email: string;
@@ -16,6 +19,14 @@ const LoginPage = () => {
     const { errorMessage, loading, onLogin } = useUserRole();
 
     const [isOpen, setIsOpen] = useState(false);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const sessionExpired = searchParams.get("sessionExpired");
+        if (sessionExpired) {
+            toast.error("Your session has expired. Please log in again.");
+        }
+    }, [searchParams]);
 
     const {
         register,
