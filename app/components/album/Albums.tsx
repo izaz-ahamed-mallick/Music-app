@@ -42,25 +42,22 @@ export default function Albums() {
     return loading ? (
         <AlbumLoader />
     ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-6 relative">
+        <div className=" album-list flex overflow-x-auto gap-6 px-6 py-6">
             {albums.map((album) => (
-                <div
-                    key={album.id}
-                    className="relative group rounded-lg overflow-hidden"
-                >
+                <div key={album.id} className="relative flex-shrink-0 w-64">
                     <Link href={`/album/${album.id}`}>
-                        <div className="relative w-full h-72 bg-neutral-700 rounded-lg overflow-hidden shadow-lg group-hover:shadow-2xl transition-shadow duration-300">
+                        <div className="relative w-full h-72 bg-neutral-700 rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition-shadow duration-300">
                             <Image
                                 priority
                                 width={500}
                                 height={500}
                                 src={album.cover_image}
                                 alt={album.album_name}
-                                className="object-top lg:object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+                                className="object-top lg:object-cover w-full h-full transform hover:scale-105 transition-transform duration-300"
                             />
                         </div>
                         <div>
-                            <h3 className="mt-2 text-white text-lg font-semibold group-hover:text-green-400 transition-colors duration-300">
+                            <h3 className="mt-2 text-white text-lg font-semibold hover:text-green-400 transition-colors duration-300">
                                 {album.album_name}
                             </h3>
                             <p className="text-sm text-gray-400">
