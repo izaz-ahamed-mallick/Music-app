@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
-
 import { IAlbumData } from "@/types/album";
 import useCreateUrlFromStorage from "@/app/hooks/useCreateUrlFromStorage";
 import { toast } from "react-toastify";
@@ -26,7 +25,6 @@ const EditAlbumForm = ({
     const {
         register,
         handleSubmit,
-
         formState: { errors },
     } = useForm<FormData>({
         defaultValues: {
@@ -42,7 +40,6 @@ const EditAlbumForm = ({
     const [coverImagePreview, setCoverImagePreview] = useState(
         album.cover_image
     );
-
     const { uploadFileToAlbum } = useCreateUrlFromStorage();
 
     const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -77,7 +74,7 @@ const EditAlbumForm = ({
             if (error) {
                 console.error("Error updating album:", error.message);
             } else {
-                toast.success("Album update successfully");
+                toast.success("Album updated successfully");
                 onSave();
                 onClose();
             }
@@ -87,15 +84,15 @@ const EditAlbumForm = ({
     };
 
     return (
-        <div className="w-full max-w-lg bg-white bg-opacity-10 backdrop-blur-lg p-6 rounded-xl shadow-lg border border-gray-300">
-            <h2 className="text-4xl font-semibold text-center text-blue-600 mb-6">
-                Update Album Details
+        <div className="w-full max-w-lg bg-gradient-to-b from-emerald-900 p-8 rounded-xl shadow-xl backdrop-blur-lg">
+            <h2 className="text-3xl font-semibold text-white text-center mb-6">
+                Update Album
             </h2>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                 <div className="relative">
                     <label
                         htmlFor="albumName"
-                        className="block text-lg font-medium text-gray-100 mb-2"
+                        className="block text-lg font-medium text-white mb-2"
                     >
                         Album Name
                     </label>
@@ -103,13 +100,13 @@ const EditAlbumForm = ({
                         id="albumName"
                         type="text"
                         placeholder="Enter album name"
-                        className="w-full p-3 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4 bg-white bg-opacity-10 border border-blue-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         {...register("albumName", {
                             required: "Album Name is required",
                         })}
                     />
                     {errors.albumName && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-400 text-sm mt-1">
                             {errors.albumName.message}
                         </p>
                     )}
@@ -118,7 +115,7 @@ const EditAlbumForm = ({
                 <div className="relative">
                     <label
                         htmlFor="artist"
-                        className="block text-lg font-medium text-gray-100 mb-2"
+                        className="block text-lg font-medium text-white mb-2"
                     >
                         Artist
                     </label>
@@ -126,13 +123,17 @@ const EditAlbumForm = ({
                         id="artist"
                         type="text"
                         placeholder="Enter artist name"
-                        className="w-full p-3 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4 bg-white bg-opacity-10 border border-blue-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         {...register("artist", {
                             required: "Artist is required",
+                            pattern: {
+                                value: /^[A-Za-z\s]+$/,
+                                message: "Only letters are allowed",
+                            },
                         })}
                     />
                     {errors.artist && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-400 text-sm mt-1">
                             {errors.artist.message}
                         </p>
                     )}
@@ -141,20 +142,20 @@ const EditAlbumForm = ({
                 <div className="relative">
                     <label
                         htmlFor="releaseDate"
-                        className="block text-lg font-medium text-gray-100 mb-2"
+                        className="block text-lg font-medium text-white mb-2"
                     >
                         Release Date
                     </label>
                     <input
                         id="releaseDate"
                         type="date"
-                        className="w-full p-3 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4 bg-white bg-opacity-10 border border-blue-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         {...register("releaseDate", {
                             required: "Release Date is required",
                         })}
                     />
                     {errors.releaseDate && (
-                        <p className="text-red-500 text-sm mt-1">
+                        <p className="text-red-400 text-sm mt-1">
                             {errors.releaseDate.message}
                         </p>
                     )}
@@ -163,7 +164,7 @@ const EditAlbumForm = ({
                 <div className="relative">
                     <label
                         htmlFor="coverImage"
-                        className="block text-lg font-medium text-gray-100 mb-2"
+                        className="block text-lg font-medium text-white mb-2"
                     >
                         Cover Image
                     </label>
@@ -171,34 +172,34 @@ const EditAlbumForm = ({
                         id="coverImage"
                         type="file"
                         accept="image/*"
-                        className="w-full p-3 bg-white bg-opacity-20 border border-gray-400 rounded-lg text-gray-100 placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-4 bg-white bg-opacity-10 border border-blue-500 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
                         {...register("coverImage")}
                         onChange={handleCoverImageChange}
                     />
                     {coverImagePreview && (
-                        <div className="mt-4">
+                        <div className="mt-4 w-24 h-36">
                             <Image
-                                width={100}
-                                height={100}
+                                width={96}
+                                height={96}
                                 src={coverImagePreview}
                                 alt="Cover Preview"
-                                className="rounded-lg shadow-md"
+                                className="rounded-lg shadow-xl transform hover:scale-105 transition-all duration-300"
                             />
                         </div>
                     )}
                 </div>
 
-                <div className="flex justify-between mt-6">
+                <div className="flex justify-between mt-10">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-6 py-3 text-sm font-medium text-gray-100 bg-gray-700 hover:bg-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+                        className="px-6 py-3 text-sm font-medium text-white bg-gray-600 hover:bg-gray-500 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
-                        className="px-6 py-3 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="px-6 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
                     >
                         Save Changes
                     </button>

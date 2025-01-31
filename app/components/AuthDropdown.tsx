@@ -71,7 +71,10 @@ const AuthDropdown: React.FC = () => {
                         </p>
                         {user.role === "admin" && (
                             <button
-                                onClick={() => router.push("/admin")}
+                                onClick={() => {
+                                    router.push("/admin");
+                                    setDropdownOpen(false);
+                                }}
                                 className="text-sm text-blue-600 hover:text-blue-800 w-full text-left py-2"
                             >
                                 Admin Panel
@@ -79,7 +82,10 @@ const AuthDropdown: React.FC = () => {
                         )}
                         {user.role === "user" && (
                             <button
-                                onClick={() => router.push(`/user/${user.id}`)}
+                                onClick={() => {
+                                    router.push(`/user/${user.id}`);
+                                    setDropdownOpen(false);
+                                }}
                                 className="text-sm text-blue-600 hover:text-blue-800 w-full text-left py-2"
                             >
                                 User account

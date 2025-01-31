@@ -7,17 +7,21 @@ export async function middleware(req: NextRequest) {
     const { pathname } = req.nextUrl;
     const token = req.cookies.get("access_token")?.value;
 
-    if (isTokenExpired(token)) {
-        return NextResponse.redirect(new URL("/auth/login", req.url));
-    }
-    if (!token) {
-        console.log("No token found, redirecting to home");
+    // ✅ If the token exists and is valid, prevent access to login page
+    if (pathname.startsWith("/auth") && token && !isTokenExpired(token)) {
+        console.log("Redirecting logged-in user to homepage.");
         return NextResponse.redirect(new URL("/", req.url));
     }
 
-    if (pathname.startsWith("/admin")) {
-        console.log("token", token);
+    // ✅ If token is expired, clear token and redirect to login page
+    if (token && isTokenExpired(token)) {
+        const response = NextResponse.redirect(new URL("/auth/login", req.url));
+        response.cookies.delete("access_token");
+        return response;
+    }
 
+    // ✅ Admin route protection
+    if (pathname.startsWith("/admin")) {
         const {
             data: { user },
             error,
@@ -38,13 +42,14 @@ export async function middleware(req: NextRequest) {
             .from("users")
             .select("role")
             .eq("id", user?.id)
-            .single(); // Ensures exactly one row is returned
+            .single();
 
         if (roleError || !roles) {
             console.log("Role not found:", roles);
             return NextResponse.redirect(new URL("/", req.url));
         }
 
+        // ✅ Only allow access if user has 'admin' role
         if (roles.role !== "admin") {
             return NextResponse.redirect(new URL("/unauthorized", req.url));
         }
@@ -56,5 +61,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-    matcher: ["/admin/:path*"],
+    matcher: ["/admin/:path*", "/auth/:path*"],
 };

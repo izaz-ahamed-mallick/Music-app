@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Sidebar from "./components/Sidebar";
+
 import MusicPlayer from "./components/MusicPlayer/MusicPlayer";
 import { ToastContainer } from "react-toastify";
-import Header from "./components/Header";
+
 import Head from "next/head";
+
+import ClientLayout from "./components/layout/clientLayout";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -46,14 +48,7 @@ export default function RootLayout({
                         href="/favicon-32x32.png"
                     />
                 </Head>
-                <Sidebar>
-                    <Header>
-                        <div className=" min-h-screen overflow-y-auto pb-[200px]">
-                            {children}
-                        </div>
-                    </Header>
-                </Sidebar>
-
+                <ClientLayout>{children}</ClientLayout>
                 <div className="fixed bottom-0 left-0 w-full">
                     <MusicPlayer />
                 </div>

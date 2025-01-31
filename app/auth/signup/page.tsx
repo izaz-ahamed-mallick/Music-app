@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 type FormData = {
     email: string;
@@ -44,14 +45,18 @@ const SignUpPage = () => {
                     setErrorMessage(
                         "This email is already in use. Please try logging in."
                     );
+                    toast.error(
+                        "This email is already in use. Please try logging in."
+                    );
                 } else {
+                    toast.error(error.message);
                     setErrorMessage(error.message);
                 }
             } else {
                 const user = signUpData?.user;
 
                 if (user) {
-                    router.push("/auth/login");
+                    router.replace("/auth/login");
                 }
             }
         } catch (er) {

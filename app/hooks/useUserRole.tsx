@@ -74,7 +74,7 @@ const useUserRole = () => {
                     fetchFavoriteAlbum(data.id);
                 }
 
-                router.push("/");
+                router.replace("/");
             }
         } catch (error) {
             console.log(error);
