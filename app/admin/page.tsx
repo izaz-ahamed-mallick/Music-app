@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { PlusCircle, Music, Users } from "lucide-react";
 import Button from "../components/Button";
-
 import Modal from "../components/Modal";
-
 import { useModelStore } from "@/store/useModelStore";
 import UserManagement from "../components/admin/UserManagement";
 import AlbumOverview from "../components/admin/AlbumOverview";
@@ -20,56 +20,84 @@ const Admin = () => {
     const closeSongModal = () => setIsSongModalOpen(false);
 
     return (
-        <>
-            <div className="min-h-screen bg-gray-900 text-white p-8">
-                <div className="max-w-7xl mx-auto space-y-12">
-                    <div className="flex justify-between items-center mb-8">
-                        <h1 className="text-5xl font-bold text-blue-500">
-                            Admin Dashboard
-                        </h1>
-
-                        <div className=" space-y-3">
-                            <Button
-                                onClick={openAlbumModal}
-                                className="bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all"
-                            >
-                                Create Album
-                            </Button>
-
-                            <Button
-                                onClick={openSongModal}
-                                className="bg-green-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 hover:shadow-xl transition-all"
-                            >
-                                Create Song
-                            </Button>
-                        </div>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-8">
+            <div className="max-w-7xl mx-auto space-y-12">
+                {/* Header Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    className="flex justify-between items-center mb-8 flex-col sm:flex-row"
+                >
+                    <h1 className="text-5xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                        Admin Dashboard
+                    </h1>
+                    <div className="flex space-x-4 mt-4 sm:mt-0 sm:flex-row flex-col">
+                        <Button
+                            onClick={openAlbumModal}
+                            className="flex items-center gap-2 bg-blue-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl transition-all w-full sm:w-auto"
+                        >
+                            <PlusCircle size={20} /> Create Album
+                        </Button>
+                        <Button
+                            onClick={openSongModal}
+                            className="flex items-center gap-2 bg-green-600 text-white py-3 px-6 rounded-lg shadow-lg hover:bg-green-700 hover:shadow-xl transition-all w-full sm:w-auto mt-4 sm:mt-0"
+                        >
+                            <PlusCircle size={20} /> Create Song
+                        </Button>
                     </div>
+                </motion.div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 space-y-10 ">
-                        {/* Album Overview Card */}
-                        <div className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-lg shadow-lg ">
-                            <h2 className="text-3xl font-semibold mb-4 text-white">
-                                Albums Overview
-                            </h2>
-                            <p className="text-gray-200 text-lg mb-3">
-                                Manage and view all your albums here.
-                            </p>
+                <div className="space-y-8">
+                    {/* Album Overview */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6 }}
+                        className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl shadow-2xl relative overflow-hidden"
+                    >
+                        <Music
+                            size={40}
+                            className="text-white opacity-80 mb-4"
+                        />
+                        <h2 className="text-3xl font-semibold text-white mb-4">
+                            Albums Overview
+                        </h2>
+                        <p className="text-gray-200 text-lg mb-6">
+                            Manage and view all your albums here. Track your
+                            musical journey!
+                        </p>
+                        <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
                             <AlbumOverview />
                         </div>
+                    </motion.div>
 
-                        <div className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-lg shadow-lg">
-                            <h2 className="text-3xl font-semibold mb-4 text-white">
-                                User Management
-                            </h2>
-                            <p className="text-gray-200 text-lg mb-3">
-                                Manage users, roles, and permissions.
-                            </p>
+                    {/* User Management */}
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-xl shadow-2xl relative overflow-hidden"
+                    >
+                        <Users
+                            size={40}
+                            className="text-white opacity-80 mb-4"
+                        />
+                        <h2 className="text-3xl font-semibold text-white mb-4">
+                            User Management
+                        </h2>
+                        <p className="text-gray-200 text-lg mb-6">
+                            Manage users, roles, and permissions for your
+                            application.
+                        </p>
+                        <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
                             <UserManagement />
                         </div>
-                    </div>
+                    </motion.div>
                 </div>
             </div>
 
+            {/* Modals for Create Album and Create Song */}
             <Modal isOpen={isAlbumModalOpen} onClose={closeAlbumModal}>
                 <CreateAlbum onClose={closeAlbumModal} />
             </Modal>
@@ -77,7 +105,7 @@ const Admin = () => {
             <Modal isOpen={isSongModalOpen} onClose={closeSongModal}>
                 <CreateSong onClose={closeSongModal} />
             </Modal>
-        </>
+        </div>
     );
 };
 

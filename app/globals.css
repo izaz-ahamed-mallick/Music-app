@@ -13,6 +13,9 @@ body,
 .hide-scrollbar::-webkit-scrollbar {
     display: none;
 }
+.modal::-webkit-scrollbar {
+    display: none;
+}
 
 .album-list::-webkit-scrollbar {
     width: 5px;

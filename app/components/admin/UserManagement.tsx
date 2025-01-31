@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-
 import Modal from "../Modal";
 import EditUserForm from "../EditUserForm";
 import { IUserData } from "@/types/auth";
@@ -16,11 +15,10 @@ const UserManagement = () => {
         fetchUsersRef.current = async () => {
             const { data, error } = await supaBaseInstence
                 .from("users")
-                .select("id,role,username,email");
+                .select("id, role, username, email");
             if (error) {
                 console.error("Error fetching users:", error.message);
             } else {
-                console.log(data);
                 setUsers(data);
             }
         };
@@ -67,60 +65,57 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="p-6 w-full bg-gray-800 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-semibold text-white mb-4">
+        <div className="bg-gradient-to-br from-gray-900 to-black text-white p-6 rounded-xl shadow-lg">
+            <h2 className="text-3xl font-semibold mb-6 text-white">
                 User Management
             </h2>
 
-            <input
-                type="text"
-                placeholder="Search by username or email"
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full p-3 mb-4 bg-gray-700 text-white rounded-md"
-            />
+            {/* Search Input */}
+            <div className="mb-6">
+                <input
+                    type="text"
+                    placeholder="Search by username or email"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="w-full p-3 bg-gray-800 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                />
+            </div>
 
-            <div className="mb-4 text-white">
+            {/* Total Users Count */}
+            <div className="text-white mb-6">
                 <span>Total Users: {users.length}</span>
             </div>
 
-            <div className="overflow-x-auto bg-gray-700 rounded-lg">
-                <table className="min-w-full">
+            {/* User Table */}
+            <div className="overflow-x-auto bg-gray-800 rounded-lg shadow-md">
+                <table className="min-w-full table-auto text-left">
                     <thead>
-                        <tr>
-                            <th className="text-left text-white py-2 px-4">
-                                Username
-                            </th>
-                            <th className="text-left text-white py-2 px-4">
-                                Email
-                            </th>
-                            <th className="text-left text-white py-2 px-4">
-                                Role
-                            </th>
-                            <th className="text-left text-white py-2 px-4">
-                                Actions
-                            </th>
+                        <tr className="border-b border-gray-600">
+                            <th className="py-3 px-4 text-white">Username</th>
+                            <th className="py-3 px-4 text-white">Email</th>
+                            <th className="py-3 px-4 text-white">Role</th>
+                            <th className="py-3 px-4 text-white">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {filteredUsers.map((user) => (
                             <tr
                                 key={user.id}
-                                className="border-t border-gray-600"
+                                className="border-t border-gray-600 hover:bg-gray-700"
                             >
-                                <td className="py-2 px-4 text-white">
+                                <td className="py-3 px-4 text-white">
                                     {user.username}
                                 </td>
-                                <td className="py-2 px-4 text-white">
+                                <td className="py-3 px-4 text-white">
                                     {user.email}
                                 </td>
-                                <td className="py-2 px-4 text-white">
+                                <td className="py-3 px-4 text-white">
                                     {user.role}
                                 </td>
-                                <td className="py-2 px-4">
+                                <td className="py-3 px-4 flex gap-4">
                                     <button
                                         onClick={() => handleEditUser(user)}
-                                        className="text-blue-500 mr-2 hover:underline"
+                                        className="text-blue-500 hover:text-blue-600 transition duration-200"
                                     >
                                         Edit
                                     </button>
@@ -128,7 +123,7 @@ const UserManagement = () => {
                                         onClick={() =>
                                             handleDeleteUser(user.id)
                                         }
-                                        className="text-red-500 hover:underline"
+                                        className="text-red-500 hover:text-red-600 transition duration-200"
                                     >
                                         Delete
                                     </button>
@@ -139,6 +134,7 @@ const UserManagement = () => {
                 </table>
             </div>
 
+            {/* Edit User Modal */}
             {isEditModalOpen && selectedUser && (
                 <Modal
                     isOpen={isEditModalOpen}
