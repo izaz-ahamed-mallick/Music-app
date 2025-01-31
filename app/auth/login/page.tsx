@@ -1,20 +1,17 @@
 "use client";
 
+import { Suspense, useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-
 import useUserRole from "@/app/hooks/useUserRole";
-import { useEffect, useState } from "react";
-import Modal from "@/app/components/Modal";
-import ForgotPassword from "@/app/components/ForgotPassword";
-
 import { toast } from "react-toastify";
 import { useSearchParams } from "next/navigation";
+import Modal from "@/app/components/Modal";
+import ForgotPassword from "@/app/components/ForgotPassword";
 
 interface FormData {
     email: string;
     password: string;
 }
-
 const LoginPage = () => {
     const { errorMessage, loading, onLogin } = useUserRole();
 
@@ -39,7 +36,7 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen ">
+        <div className="flex justify-center items-center min-h-screen">
             <div className="bg-gray-800 bg-opacity-65 p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-semibold text-center text-white mb-4">
                     Login
@@ -109,7 +106,7 @@ const LoginPage = () => {
 
                 <div className="mt-4 text-center">
                     <p className="text-sm text-gray-400">
-                        Dont have an account?{" "}
+                        Don&apos;t have an account?{" "}
                         <a
                             href="/auth/signup"
                             className="text-blue-500 hover:underline"
@@ -132,4 +129,10 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+const SuspenseLoginPage = () => (
+    <Suspense fallback={<div>Loading...</div>}>
+        <LoginPage />
+    </Suspense>
+);
+
+export default SuspenseLoginPage;
