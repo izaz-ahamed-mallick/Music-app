@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
 import { useModelStore } from "@/store/useModelStore";
@@ -14,42 +14,40 @@ const AlbumOverview = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedAlbum, setSelectedAlbum] = useState<IAlbumData | null>(null);
-    const fetchAlbumRef = useRef<() => Promise<void> | null>(null);
+
     const { openAlbumModal, isAlbumModalOpen } = useModelStore();
-    const { handleDeleteAlbum, loading } = useAlbumDelete(albums, setAlbums);
+    const { handleDeleteAlbum } = useAlbumDelete(albums, setAlbums);
     const [Albumloading, setLoading] = useState(false);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    const fetchAlbums = async () => {
+        setLoading(true);
+        try {
+            const { data, error } = await supaBaseInstence
+                .from("albums")
+                .select("id, album_name, artist, release_date, cover_image");
+            if (error) throw error;
+            setAlbums(data);
+        } catch (error) {
+            console.error("Error fetching albums:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        fetchAlbumRef.current = async () => {
-            setLoading(true);
-            try {
-                const { data, error } = await supaBaseInstence
-                    .from("albums")
-                    .select(
-                        "id, album_name, artist, release_date, cover_image"
-                    );
-                if (error) {
-                    console.error("Error fetching albums:", error.message);
-                } else {
-                    setAlbums(data);
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchAlbumRef.current();
+        fetchAlbums();
     }, [isAlbumModalOpen]);
 
-    const filteredAlbums = albums.filter(
-        (album) =>
-            album.album_name
-                .toLowerCase()
-                .includes(searchQuery.toLowerCase()) ||
-            album.artist.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredAlbums = useMemo(() => {
+        return albums.filter(
+            (album) =>
+                album.album_name
+                    .toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                album.artist.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [albums, searchQuery]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -62,13 +60,13 @@ const AlbumOverview = () => {
 
     const handleSaveChanges = () => {
         setIsEditModalOpen(false);
-        if (fetchAlbumRef.current) {
-            fetchAlbumRef.current();
-        }
+        fetchAlbums();
     };
 
-    const handleAlbumDelete = (id: string) => {
-        handleDeleteAlbum(id);
+    const handleAlbumDelete = async (id: string) => {
+        setDeletingId(id);
+        await handleDeleteAlbum(id);
+        setDeletingId(null);
     };
 
     return (
@@ -148,10 +146,12 @@ const AlbumOverview = () => {
                                             onClick={() =>
                                                 handleAlbumDelete(album.id)
                                             }
-                                            disabled={loading}
+                                            disabled={deletingId === album.id}
                                             className="text-red-500 hover:text-red-600 transition duration-200"
                                         >
-                                            {loading ? "Deleting..." : "Delete"}
+                                            {deletingId === album.id
+                                                ? "Deleting..."
+                                                : "Delete"}
                                         </button>
                                     </td>
                                 </tr>

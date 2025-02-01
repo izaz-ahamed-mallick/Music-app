@@ -1,55 +1,55 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
-import { useRouter } from "next/navigation";
+import { useRouter, useParams } from "next/navigation"; // import useParams
 import { toast } from "react-toastify";
-interface UserProfileProps {
-    params: { id: string };
-}
 
-const UserEdit = ({ params }: UserProfileProps) => {
+const UserEdit = () => {
     const [displayName, setDisplayName] = useState("");
     const [loading, setLoading] = useState(false);
+    const { id } = useParams(); // Retrieve params using useParams
 
     const router = useRouter();
 
     const handleUpdate = async (e: React.FormEvent) => {
         e.preventDefault();
-
         setLoading(true);
 
         try {
             const { error } = await supaBaseInstence
                 .from("users")
                 .update({ username: displayName })
-                .eq("id", params.id);
+                .eq("id", id);
 
-            if (error) {
-                throw error;
-            }
+            if (error) throw error;
 
             toast.success("Display name updated successfully!");
-            setTimeout(() => router.push(`/user/${params.id}`), 2000);
+            setTimeout(() => router.push(`/user/${id}`), 2000);
         } catch (error) {
-            toast.error("An error occurred.");
-            console.log(error);
+            toast.error("Failed to update display name. Please try again.");
+            console.error(error);
         } finally {
             setLoading(false);
         }
     };
 
+    useEffect(() => {
+        // If you want to perform a fetch or other logic when id changes, you can do it here
+    }, [id]);
+
     return (
-        <div className="p-6 min-h-screen flex items-center justify-center">
-            <div className="bg-white shadow-2xl rounded-lg p-8 max-w-lg w-full">
-                <h1 className="text-2xl font-bold text-gray-900 mb-6">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-6">
+            <div className="max-w-lg w-full bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-8 border border-white/20">
+                <h1 className="text-3xl font-extrabold text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
                     Edit Display Name
                 </h1>
-                <form onSubmit={handleUpdate} className="space-y-6">
+
+                <form onSubmit={handleUpdate} className="space-y-6 mt-6">
                     <div>
                         <label
                             htmlFor="displayName"
-                            className="block text-gray-700 font-medium mb-2"
+                            className="block text-gray-300 font-medium mb-2"
                         >
                             New Display Name
                         </label>
@@ -59,26 +59,33 @@ const UserEdit = ({ params }: UserProfileProps) => {
                             value={displayName}
                             onChange={(e) => setDisplayName(e.target.value)}
                             placeholder="Enter your new display name"
-                            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
+                            className="w-full px-4 py-2 bg-gray-800 text-white border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
                         />
                     </div>
 
                     <button
                         type="submit"
                         disabled={loading || !displayName.trim()}
-                        className={`w-full py-3 text-white font-semibold rounded-lg transition ${
+                        className={`w-full py-3 font-semibold rounded-lg transition flex items-center justify-center ${
                             loading
-                                ? "bg-gray-400 cursor-not-allowed"
+                                ? "bg-gray-600 cursor-not-allowed"
                                 : "bg-blue-600 hover:bg-blue-700"
                         }`}
                     >
-                        {loading ? "Updating..." : "Update Display Name"}
+                        {loading ? (
+                            <div
+                                aria-live="polite"
+                                className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"
+                            ></div>
+                        ) : (
+                            "Update Display Name"
+                        )}
                     </button>
                 </form>
 
                 <button
-                    onClick={() => router.push(`/user/${params.id}`)}
-                    className="mt-6 text-blue-600 hover:underline"
+                    onClick={() => router.push(`/user/${id}`)}
+                    className="mt-6 w-full text-center text-blue-400 hover:underline transition"
                 >
                     Cancel and Go Back
                 </button>

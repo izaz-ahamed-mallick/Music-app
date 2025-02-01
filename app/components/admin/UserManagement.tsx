@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Modal from "../Modal";
 import EditUserForm from "../EditUserForm";
@@ -10,31 +10,33 @@ const UserManagement = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<IUserData | null>(null);
     const fetchUsersRef = useRef<() => Promise<void> | null>(null);
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
-    useEffect(() => {
-        fetchUsersRef.current = async () => {
+    const fetchUsers = async () => {
+        try {
             const { data, error } = await supaBaseInstence
                 .from("users")
                 .select("id, role, username, email");
-            if (error) {
-                console.error("Error fetching users:", error.message);
-            } else {
-                setUsers(data);
-            }
-        };
+            if (error) throw error;
+            setUsers(data);
+        } catch (error) {
+            console.error("Error fetching users:", error);
+        }
+    };
 
-        fetchUsersRef.current();
+    useEffect(() => {
+        fetchUsers();
     }, []);
 
-    const filteredUsers = users.filter(
-        (user) =>
-            (user.username?.toLowerCase() || "").includes(
-                searchQuery.toLowerCase()
-            ) ||
-            (user.email?.toLowerCase() || "").includes(
-                searchQuery.toLowerCase()
-            )
-    );
+    const filteredUsers = useMemo(() => {
+        return users.filter(
+            (user) =>
+                user.username
+                    ?.toLowerCase()
+                    .includes(searchQuery.toLowerCase()) ||
+                user.email?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [users, searchQuery]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(e.target.value);
@@ -51,16 +53,20 @@ const UserManagement = () => {
     };
 
     const handleDeleteUser = async (userId: string) => {
-        const { error } = await supaBaseInstence
-            .from("users")
-            .delete()
-            .match({ id: userId });
-        if (error) {
-            console.error("Error deleting user:", error.message);
-        } else {
+        setDeletingId(userId);
+        try {
+            const { error } = await supaBaseInstence
+                .from("users")
+                .delete()
+                .match({ id: userId });
+            if (error) throw error;
             setUsers((prevUsers) =>
                 prevUsers.filter((user) => user.id !== userId)
             );
+        } catch (error) {
+            console.error("Error deleting user:", error);
+        } finally {
+            setDeletingId(null);
         }
     };
 
@@ -123,9 +129,12 @@ const UserManagement = () => {
                                         onClick={() =>
                                             handleDeleteUser(user.id)
                                         }
+                                        disabled={deletingId === user.id}
                                         className="text-red-500 hover:text-red-600 transition duration-200"
                                     >
-                                        Delete
+                                        {deletingId === user.id
+                                            ? "Deleting..."
+                                            : "Delete"}
                                     </button>
                                 </td>
                             </tr>

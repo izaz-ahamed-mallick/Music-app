@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Music, Users } from "lucide-react";
 import Button from "../components/Button";
@@ -10,14 +10,31 @@ import UserManagement from "../components/admin/UserManagement";
 import AlbumOverview from "../components/admin/AlbumOverview";
 import CreateAlbum from "../components/admin/CreateAlbum";
 import CreateSong from "../components/admin/CreateSong";
+import AdminShimmerLoader from "../components/Loader/AdminShimmerLoader";
 
 const Admin = () => {
     const [isSongModalOpen, setIsSongModalOpen] = useState(false);
     const { closeAlbumModal, isAlbumModalOpen, openAlbumModal } =
         useModelStore();
+    const [loading, setLoading] = useState(true);
 
     const openSongModal = () => setIsSongModalOpen(true);
     const closeSongModal = () => setIsSongModalOpen(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoading(false);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen bg-black flex justify-center items-center">
+                <AdminShimmerLoader />
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-8">

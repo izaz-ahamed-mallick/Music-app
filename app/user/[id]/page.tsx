@@ -22,32 +22,37 @@ const UserProfile = async ({ params }: UserProfileProps) => {
     }
 
     return (
-        <div className="p-6 min-h-screen">
-            <div className="max-w-3xl mx-auto bg-white shadow-2xl rounded-2xl overflow-hidden">
-                <div className="p-8">
-                    <h1 className="text-4xl font-extrabold text-gray-900 mb-6">
-                        Welcome,{" "}
-                        <span className="text-blue-600">
-                            {userData.username || "User"}
-                        </span>
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white flex items-center justify-center p-6">
+            <div className="max-w-2xl w-full bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-8 border border-white/20">
+                <div className="text-center">
+                    <h1 className="text-4xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+                        {userData.username || "User"}
                     </h1>
-                    <p className="text-lg text-gray-700 mb-4">
-                        <span className="font-medium">Email:</span>{" "}
-                        {userData.email}
+                    <p className="text-gray-300 text-lg mt-2">
+                        Welcome to your profile!
                     </p>
-                    <p className="text-lg text-gray-700 mb-4">
-                        <span className="font-medium">Role:</span>{" "}
-                        {userData.role}
-                    </p>
+                </div>
 
-                    <div className="flex gap-6 mt-8">
-                        <Link
-                            href={`/user/${userData.id}/edit`}
-                            className="px-6 py-3 bg-green-600 text-white rounded-lg shadow-lg transform transition-transform hover:-translate-y-1 hover:shadow-xl hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                        >
-                            Edit Profile
-                        </Link>
+                <div className="mt-6 space-y-4">
+                    <div className="bg-white/10 p-4 rounded-lg flex justify-between items-center shadow-md">
+                        <span className="text-gray-300 font-medium">Email</span>
+                        <span className="text-white">{userData.email}</span>
                     </div>
+                    <div className="bg-white/10 p-4 rounded-lg flex justify-between items-center shadow-md">
+                        <span className="text-gray-300 font-medium">Role</span>
+                        <span className="text-white capitalize">
+                            {userData.role}
+                        </span>
+                    </div>
+                </div>
+
+                <div className="mt-8 flex justify-center">
+                    <Link
+                        href={`/user/${userData.id}/edit`}
+                        className="px-6 py-3 bg-blue-600 text-white rounded-lg shadow-lg transition-all hover:bg-blue-700 hover:shadow-xl transform hover:-translate-y-1"
+                    >
+                        Edit Profile
+                    </Link>
                 </div>
             </div>
         </div>
