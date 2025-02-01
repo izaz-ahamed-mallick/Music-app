@@ -24,8 +24,7 @@ export const useAddedAlbumStore = create<IAddedAlbumData>()(
                     console.error("Error fetching favorite albums:", error);
                     return;
                 }
-                console.log("userId", userId);
-                console.log("fav id", favoriteAlbum);
+
                 if (!favoriteAlbum || favoriteAlbum.length === 0) {
                     console.log("No favorite albums found for this user.");
                     return;
@@ -43,7 +42,7 @@ export const useAddedAlbumStore = create<IAddedAlbumData>()(
                         console.log("Error fetching Album data");
                         return;
                     }
-                    console.log("fav", albums);
+
                     set({ addedAlbumList: albums || [] });
                 }
             },

@@ -104,6 +104,10 @@ const CreateAlbum: React.FC<ICreateAlbumProps> = ({ onClose }) => {
                                     className="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                     {...register("artist", {
                                         required: "Artist name is required",
+                                        pattern: {
+                                            value: /^[A-Za-z\s]+$/,
+                                            message: "Only letters are allowed",
+                                        },
                                     })}
                                 />
                                 {errors.artist && (

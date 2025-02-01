@@ -1,10 +1,11 @@
 import { Suspense } from "react";
-import PlayButton from "@/app/components/PlayButton";
+
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { IAlbumData } from "@/types/album";
 import { ISongData } from "@/types/song";
 import Image from "next/image";
 import AlbumPageLoader from "@/app/components/Loader/AlbumPageLoader";
+import SongCard from "@/app/components/songs/SongCard";
 
 interface AlbumPageProps {
     params: { id: string };
@@ -102,28 +103,7 @@ async function AlbumContent({ id }: AlbumContentProps) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {songs.length > 0 ? (
                         songs.map((song) => (
-                            <div
-                                key={song.id}
-                                className="relative group p-4 bg-neutral-800 hover:bg-neutral-900 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
-                            >
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <h3 className="text-xl text-white font-semibold">
-                                            {song.title}
-                                        </h3>
-                                        <p className="text-sm text-gray-400 mt-1">
-                                            {song.artist}
-                                        </p>
-                                    </div>
-
-                                    <PlayButton
-                                        artist={song.artist}
-                                        audioUrl={song.audio_file}
-                                        id={song.id}
-                                        title={song.title}
-                                    />
-                                </div>
-                            </div>
+                            <SongCard key={song.id} song={song} />
                         ))
                     ) : (
                         <p className="text-gray-400">

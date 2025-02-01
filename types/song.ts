@@ -4,6 +4,7 @@ export interface ICreateSongForm {
     albumId: string;
     duration: string;
     audioFile: FileList;
+    language: string;
 }
 
 export interface ISongData {
@@ -13,4 +14,5 @@ export interface ISongData {
     created_at: Date;
     id: string;
     title: string;
+    language: string;
 }

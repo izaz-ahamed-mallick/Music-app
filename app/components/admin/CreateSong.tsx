@@ -27,35 +27,25 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
             const { data, error } = await supaBaseInstence
                 .from("albums")
                 .select("id, album_name");
-
-            if (error) {
-                console.error("Error fetching albums:", error.message);
-            } else {
-                setAlbums(data);
-            }
+            if (!error) setAlbums(data);
         };
-
         fetchAlbums();
     }, []);
 
     const onSubmit = async (data: ICreateSongForm) => {
-        const { title, artist, albumId, audioFile } = data;
+        const { title, artist, albumId, audioFile, language } = data;
         const audioFileUrl = await uploadFileToAlbum(audioFile[0], "songs");
-
-        if (!audioFileUrl || audioFileUrl.length === 0) {
-            return;
-        }
+        if (!audioFileUrl) return;
 
         const success = await createSongs({
             album_id: albumId,
             artist,
             audio_file_url: audioFileUrl,
             title,
+            language,
         });
 
-        if (success) {
-            onClose();
-        }
+        if (success) onClose();
     };
 
     return (
@@ -66,7 +56,6 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-4">
-                        {/* Title Field */}
                         <div className="relative mb-4">
                             <label
                                 htmlFor="title"
@@ -78,7 +67,7 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                                 id="title"
                                 type="text"
                                 placeholder="Enter song title"
-                                className="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                                 {...register("title", {
                                     required: "Song title is required",
                                 })}
@@ -90,7 +79,6 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                             )}
                         </div>
 
-                        {/* Artist Field */}
                         <div className="relative mb-4">
                             <label
                                 htmlFor="artist"
@@ -102,7 +90,7 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                                 id="artist"
                                 type="text"
                                 placeholder="Enter artist name"
-                                className="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                                 {...register("artist", {
                                     required: "Artist name is required",
                                 })}
@@ -114,7 +102,6 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                             )}
                         </div>
 
-                        {/* Audio File Field */}
                         <div className="relative mb-4">
                             <label
                                 htmlFor="audioFile"
@@ -126,7 +113,7 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                                 id="audioFile"
                                 type="file"
                                 accept="audio/*"
-                                className="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                                 {...register("audioFile", {
                                     required: "Audio file is required",
                                 })}
@@ -140,7 +127,6 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                     </div>
 
                     <div className="space-y-4">
-                        {/* Album Selection Field */}
                         <div className="relative mb-4">
                             <label
                                 htmlFor="albumId"
@@ -153,16 +139,16 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                                 {...register("albumId", {
                                     required: "Album selection is required",
                                 })}
-                                className="w-full p-4 bg-gray-800 bg-opacity-50 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
                             >
                                 <option className="text-black" value="">
                                     Select an Album
                                 </option>
                                 {albums.map((album) => (
                                     <option
-                                        className="text-black cursor-pointer"
                                         key={album.id}
                                         value={album.id}
+                                        className="text-black cursor-pointer"
                                     >
                                         {album.album_name}
                                     </option>
@@ -171,6 +157,33 @@ const CreateSong: React.FC<ICreateSongProps> = ({ onClose }) => {
                             {errors.albumId && (
                                 <p className="text-red-500 text-sm mt-1">
                                     {errors.albumId.message}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="relative mb-4">
+                            <label
+                                htmlFor="language"
+                                className="text-lg font-medium text-gray-100 mb-2"
+                            >
+                                Language
+                            </label>
+                            <input
+                                id="language"
+                                type="text"
+                                placeholder="Enter song language (e.g., Hindi, Bengali, Spanish)"
+                                className="w-full p-4 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                                {...register("language", {
+                                    required: "Language is required",
+                                    pattern: {
+                                        value: /^[A-Za-z\s]+$/,
+                                        message: "Only letters are allowed",
+                                    },
+                                })}
+                            />
+                            {errors.language && (
+                                <p className="text-red-500 text-sm mt-1">
+                                    {errors.language.message}
                                 </p>
                             )}
                         </div>

@@ -7,11 +7,12 @@ interface ICreateSongForm {
     album_id: string;
 
     audio_file_url: string;
+    language: string;
 }
 
 const useCreateSongs = () => {
     const createSongs = async (data: ICreateSongForm) => {
-        const { album_id, artist, audio_file_url, title } = data;
+        const { album_id, artist, audio_file_url, title, language } = data;
 
         const { error } = await supaBaseInstence.from("songs").insert([
             {
@@ -20,6 +21,7 @@ const useCreateSongs = () => {
                 album_id: album_id,
 
                 audio_file: audio_file_url,
+                language,
             },
         ]);
 
