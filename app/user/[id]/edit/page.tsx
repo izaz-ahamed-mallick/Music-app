@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import { useRouter, useParams } from "next/navigation"; // import useParams
 import { toast } from "react-toastify";
@@ -33,10 +33,6 @@ const UserEdit = () => {
             setLoading(false);
         }
     };
-
-    useEffect(() => {
-        // If you want to perform a fetch or other logic when id changes, you can do it here
-    }, [id]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-6">

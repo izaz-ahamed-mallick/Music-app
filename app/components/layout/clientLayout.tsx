@@ -17,14 +17,14 @@ export default function ClientLayout({
     return shouldShowSidebar ? (
         <Sidebar>
             <Header>
-                <div className="min-h-screen overflow-y-auto pb-[200px]">
+                <div className="noScroll min-h-screen overflow-y-auto pb-[200px]">
                     {children}
                 </div>
             </Header>
         </Sidebar>
     ) : (
         <Header>
-            <div className="min-h-screen">{children}</div>
+            <div className="noScroll min-h-screen">{children}</div>
         </Header>
     );
 }

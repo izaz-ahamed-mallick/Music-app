@@ -73,7 +73,7 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
                     <FavoriteAlbums />
                 </Box>
             </div>
-            <main className="overflow-y-auto py-2  flex-1 relative">
+            <main className="noScrollOnMain overflow-y-auto py-2  flex-1 relative">
                 {children}
             </main>
         </div>

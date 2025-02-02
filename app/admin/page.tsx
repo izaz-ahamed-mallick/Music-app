@@ -1,16 +1,21 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, useCallback } from "react";
 import { motion } from "framer-motion";
 import { PlusCircle, Music, Users } from "lucide-react";
 import Button from "../components/Button";
 import Modal from "../components/Modal";
 import { useModelStore } from "@/store/useModelStore";
-import UserManagement from "../components/admin/UserManagement";
+
 import AlbumOverview from "../components/admin/AlbumOverview";
 import CreateAlbum from "../components/admin/CreateAlbum";
 import CreateSong from "../components/admin/CreateSong";
 import AdminShimmerLoader from "../components/Loader/AdminShimmerLoader";
+import Analytics from "../components/admin/Analytics";
+
+const UserManagement = React.lazy(
+    () => import("../components/admin/UserManagement")
+);
 
 const Admin = () => {
     const [isSongModalOpen, setIsSongModalOpen] = useState(false);
@@ -18,8 +23,8 @@ const Admin = () => {
         useModelStore();
     const [loading, setLoading] = useState(true);
 
-    const openSongModal = () => setIsSongModalOpen(true);
-    const closeSongModal = () => setIsSongModalOpen(false);
+    const openSongModal = useCallback(() => setIsSongModalOpen(true), []);
+    const closeSongModal = useCallback(() => setIsSongModalOpen(false), []);
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -64,7 +69,12 @@ const Admin = () => {
                         </Button>
                     </div>
                 </motion.div>
-
+                <div className="space-y-8">
+                    <h2 className="text-3xl font-semibold text-white mb-2">
+                        Analytics Overview
+                    </h2>
+                </div>
+                <Analytics />
                 <div className="space-y-8">
                     {/* Album Overview */}
                     <motion.div
@@ -108,7 +118,9 @@ const Admin = () => {
                             application.
                         </p>
                         <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
-                            <UserManagement />
+                            <Suspense fallback={<AdminShimmerLoader />}>
+                                <UserManagement />
+                            </Suspense>
                         </div>
                     </motion.div>
                 </div>
