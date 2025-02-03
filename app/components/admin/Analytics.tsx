@@ -48,7 +48,11 @@ const AnalyticsCards = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return (
+            <div>
+                <AnalyticsLoader />
+            </div>
+        );
     }
 
     const { albumCount, songCount, userCount } = data;
@@ -98,5 +102,24 @@ const AnalyticsCards = () => {
         </div>
     );
 };
+
+function AnalyticsLoader() {
+    return (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {Array.from({ length: 3 }).map((_, index) => (
+                <div
+                    key={index}
+                    className="p-6 bg-gray-800 rounded-lg shadow-lg flex items-center transition-all animate-pulse"
+                >
+                    <div className="mr-4 bg-gray-600 animate-pulse"></div>
+                    <div>
+                        <h3 className="bg-gray-600 animate-pulse"></h3>
+                        <p className="bg-gray-600 animate-pulse"></p>
+                    </div>
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default AnalyticsCards;
