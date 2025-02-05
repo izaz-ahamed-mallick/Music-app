@@ -68,7 +68,7 @@ const SignUpPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
+        <div className="flex justify-center items-center">
             <div className="bg-gradient-to-b from-emerald-900 p-6 rounded-lg shadow-md w-96">
                 <h2 className="text-xl font-semibold mb-4 text-center">
                     Sign Up

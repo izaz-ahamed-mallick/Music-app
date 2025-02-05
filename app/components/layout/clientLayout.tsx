@@ -24,7 +24,7 @@ export default function ClientLayout({
         </Sidebar>
     ) : (
         <Header>
-            <div className="noScroll min-h-screen">{children}</div>
+            <div className="noScroll ">{children}</div>
         </Header>
     );
 }

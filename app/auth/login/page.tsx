@@ -36,8 +36,8 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="flex justify-center items-center min-h-screen">
-            <div className="bg-gray-800 bg-opacity-65 p-8 rounded-lg shadow-md w-96">
+        <div className="flex justify-center items-center ">
+            <div className="bg-gradient-to-b from-emerald-900 p-8 rounded-lg shadow-md w-96">
                 <h2 className="text-2xl font-semibold text-center text-white mb-4">
                     Login
                 </h2>
