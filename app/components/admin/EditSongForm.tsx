@@ -83,7 +83,7 @@ const EditSongForm = ({
 
             const file = data.audio_file ? data.audio_file[0] : null;
             const songFileUrl = file
-                ? await uploadFileToAlbum(file, "song-files")
+                ? await uploadFileToAlbum(file, "songs")
                 : song.audio_file;
 
             const { error } = await supaBaseInstence
