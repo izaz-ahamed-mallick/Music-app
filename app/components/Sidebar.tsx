@@ -37,17 +37,22 @@ const Sidebar: React.FC<SideBarProps> = ({ children }) => {
             <div className="hidden md:flex flex-col gap-y-2 bg-black h-full w-[250px] p-2">
                 <Box>
                     <div className="flex flex-col gap-y-4 px-5 py-4">
-                        <div className="flex items-center gap-x-2 mb-2">
-                            <Image
-                                width={50}
-                                height={50}
-                                src="/logo.png"
-                                alt="Melodify Logo"
-                                className="rounded-full object-cover"
-                            />
-                            <h1 className="text-2xl font-bold text-green-600">
-                                Melodify
-                            </h1>
+                        <div className="flex items-center py-4">
+                            <div className="flex items-center gap-x-2 mb-4">
+                                <div className="relative flex-1 w-16 h-16 border-4 border-green-900 rounded-full shadow-lg overflow-hidden ">
+                                    <Image
+                                        width={64}
+                                        height={64}
+                                        src="/logoo.png"
+                                        alt="Melodify Logo"
+                                        className="object-cover w-full h-full"
+                                    />
+                                </div>
+
+                                <h1 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-green-600">
+                                    Melodify
+                                </h1>
+                            </div>
                         </div>
 
                         {routes.map((route) => (
