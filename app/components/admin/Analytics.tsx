@@ -10,7 +10,11 @@ interface IAnalyticsTableData {
     userCount: number;
 }
 
-const AnalyticsCards = () => {
+interface IAnalyticsProps {
+    toggleTables: (table: "albums" | "songs" | "users") => void;
+}
+
+const AnalyticsCards = ({ toggleTables }: IAnalyticsProps) => {
     const [data, setData] = useState<IAnalyticsTableData>({
         albumCount: 0,
         songCount: 0,
@@ -86,7 +90,10 @@ const AnalyticsCards = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: index * 0.2 }}
-                    className="p-6 bg-gray-800 rounded-lg shadow-lg flex items-center hover:bg-gray-700 transition-all"
+                    className="p-6 bg-gray-800 rounded-lg shadow-lg flex items-center hover:bg-gray-700 transition-all cursor-pointer"
+                    onClick={() =>
+                        toggleTables(stat.id as "albums" | "songs" | "users")
+                    }
                 >
                     <div className="mr-4">{stat.icon}</div>
                     <div>

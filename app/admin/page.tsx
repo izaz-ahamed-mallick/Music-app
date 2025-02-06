@@ -7,12 +7,15 @@ import Button from "../components/Button";
 import Modal from "../components/Modal";
 import { useModelStore } from "@/store/useModelStore";
 
-import AlbumOverview from "../components/admin/AlbumOverview";
 import CreateAlbum from "../components/admin/CreateAlbum";
 import CreateSong from "../components/admin/CreateSong";
 import AdminShimmerLoader from "../components/Loader/AdminShimmerLoader";
 import Analytics from "../components/admin/Analytics";
+import SongsOverview from "../components/admin/SongOverview";
 
+const AlbumOverview = React.lazy(
+    () => import("../components/admin/AlbumOverview")
+);
 const UserManagement = React.lazy(
     () => import("../components/admin/UserManagement")
 );
@@ -25,6 +28,13 @@ const Admin = () => {
 
     const openSongModal = useCallback(() => setIsSongModalOpen(true), []);
     const closeSongModal = useCallback(() => setIsSongModalOpen(false), []);
+    const [activeTable, setActiveTable] = useState<
+        "albums" | "songs" | "users" | null
+    >(null);
+
+    const handleTableChange = (table: "albums" | "songs" | "users") => {
+        setActiveTable(table);
+    };
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -74,55 +84,73 @@ const Admin = () => {
                         Analytics Overview
                     </h2>
                 </div>
-                <Analytics />
-                <div className="space-y-8">
-                    {/* Album Overview */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6 }}
-                        className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl shadow-2xl relative overflow-hidden"
-                    >
-                        <Music
-                            size={40}
-                            className="text-white opacity-80 mb-4"
-                        />
-                        <h2 className="text-3xl font-semibold text-white mb-4">
-                            Albums Overview
-                        </h2>
-                        <p className="text-gray-200 text-lg mb-6">
-                            Manage and view all your albums here. Track your
-                            musical journey!
-                        </p>
-                        <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
-                            <AlbumOverview />
-                        </div>
-                    </motion.div>
+                <Analytics toggleTables={handleTableChange} />
 
-                    {/* User Management */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 0.6, delay: 0.2 }}
-                        className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-xl shadow-2xl relative overflow-hidden"
-                    >
-                        <Users
-                            size={40}
-                            className="text-white opacity-80 mb-4"
-                        />
-                        <h2 className="text-3xl font-semibold text-white mb-4">
-                            User Management
-                        </h2>
-                        <p className="text-gray-200 text-lg mb-6">
-                            Manage users, roles, and permissions for your
-                            application.
-                        </p>
-                        <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
-                            <Suspense fallback={<AdminShimmerLoader />}>
-                                <UserManagement />
-                            </Suspense>
-                        </div>
-                    </motion.div>
+                <div className="space-y-8">
+                    {activeTable === "albums" && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl shadow-2xl relative overflow-hidden"
+                        >
+                            <Music
+                                size={40}
+                                className="text-white opacity-80 mb-4"
+                            />
+                            <h2 className="text-3xl font-semibold text-white mb-4">
+                                Albums Overview
+                            </h2>
+                            <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
+                                <Suspense fallback={<AdminShimmerLoader />}>
+                                    <AlbumOverview />
+                                </Suspense>
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTable === "songs" && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className="bg-gradient-to-br from-blue-600 to-purple-700 p-6 rounded-xl shadow-2xl relative overflow-hidden"
+                        >
+                            <Music
+                                size={40}
+                                className="text-white opacity-80 mb-4"
+                            />
+                            <h2 className="text-3xl font-semibold text-white mb-4">
+                                Songs Overview
+                            </h2>
+                            <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
+                                {/* Replace with your Songs Table component */}
+                                <SongsOverview />
+                            </div>
+                        </motion.div>
+                    )}
+
+                    {activeTable === "users" && (
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className="bg-gradient-to-br from-green-600 to-teal-600 p-6 rounded-xl shadow-2xl relative overflow-hidden"
+                        >
+                            <Users
+                                size={40}
+                                className="text-white opacity-80 mb-4"
+                            />
+                            <h2 className="text-3xl font-semibold text-white mb-4">
+                                User Management
+                            </h2>
+                            <div className="overflow-x-auto bg-gray-700 rounded-lg shadow-md">
+                                <Suspense fallback={<AdminShimmerLoader />}>
+                                    <UserManagement />
+                                </Suspense>
+                            </div>
+                        </motion.div>
+                    )}
                 </div>
             </div>
 
