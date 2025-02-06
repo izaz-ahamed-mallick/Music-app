@@ -104,41 +104,52 @@ const UserManagement = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredUsers.map((user) => (
-                            <tr
-                                key={user.id}
-                                className="border-t border-gray-600 hover:bg-gray-700"
-                            >
-                                <td className="py-3 px-4 text-white">
-                                    {user.username}
-                                </td>
-                                <td className="py-3 px-4 text-white">
-                                    {user.email}
-                                </td>
-                                <td className="py-3 px-4 text-white">
-                                    {user.role}
-                                </td>
-                                <td className="py-3 px-4 flex gap-4">
-                                    <button
-                                        onClick={() => handleEditUser(user)}
-                                        className="text-blue-500 hover:text-blue-600 transition duration-200"
-                                    >
-                                        Edit
-                                    </button>
-                                    <button
-                                        onClick={() =>
-                                            handleDeleteUser(user.id)
-                                        }
-                                        disabled={deletingId === user.id}
-                                        className="text-red-500 hover:text-red-600 transition duration-200"
-                                    >
-                                        {deletingId === user.id
-                                            ? "Deleting..."
-                                            : "Delete"}
-                                    </button>
+                        {filteredUsers.length > 0 ? (
+                            filteredUsers.map((user) => (
+                                <tr
+                                    key={user.id}
+                                    className="border-t border-gray-600 hover:bg-gray-700"
+                                >
+                                    <td className="py-3 px-4 text-white">
+                                        {user.username}
+                                    </td>
+                                    <td className="py-3 px-4 text-white">
+                                        {user.email}
+                                    </td>
+                                    <td className="py-3 px-4 text-white">
+                                        {user.role}
+                                    </td>
+                                    <td className="py-3 px-4 flex gap-4">
+                                        <button
+                                            onClick={() => handleEditUser(user)}
+                                            className="text-blue-500 hover:text-blue-600 transition duration-200"
+                                        >
+                                            Edit
+                                        </button>
+                                        <button
+                                            onClick={() =>
+                                                handleDeleteUser(user.id)
+                                            }
+                                            disabled={deletingId === user.id}
+                                            className="text-red-500 hover:text-red-600 transition duration-200"
+                                        >
+                                            {deletingId === user.id
+                                                ? "Deleting..."
+                                                : "Delete"}
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td
+                                    colSpan={5}
+                                    className="py-4 text-center text-white"
+                                >
+                                    No User Found!
                                 </td>
                             </tr>
-                        ))}
+                        )}
                     </tbody>
                 </table>
             </div>

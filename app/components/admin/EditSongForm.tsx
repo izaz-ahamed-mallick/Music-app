@@ -49,21 +49,20 @@ const EditSongForm = ({
     const [isButtonEnable, setIsButtonEnable] = useState(true);
 
     const formValues = watch();
-
     useEffect(() => {
         const isFormModified =
             formValues.songTitle !== song.title ||
             formValues.album !== song.album_id ||
             formValues.artist !== song.artist ||
             formValues.language !== song.language ||
-            (formValues.audio_file && formValues.audio_file.length > 0) ||
             formValues.releaseDate !==
                 (song.created_at
                     ? new Date(song.created_at).toISOString().split("T")[0]
-                    : "");
+                    : "") ||
+            songPreview !== null;
 
         setIsButtonEnable(!isFormModified);
-    }, [formValues, song]);
+    }, [formValues, song, songPreview]);
 
     const handleSongFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
@@ -105,7 +104,6 @@ const EditSongForm = ({
                 toast.success("Song updated successfully");
                 onSave();
                 onClose();
-                setIsButtonEnable(true);
             }
         } else {
             onClose();
@@ -293,8 +291,8 @@ const EditSongForm = ({
                         type="submit"
                         className={`px-6 py-3 text-sm font-medium  bg-blue-500 ${
                             !isButtonEnable
-                                ? "hover:bg-blue-600 text-white"
-                                : "text-gray-700"
+                                ? "bg-blue-500 hover:bg-blue-600"
+                                : "bg-gray-400 cursor-not-allowed"
                         } rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400`}
                     >
                         Save Changes

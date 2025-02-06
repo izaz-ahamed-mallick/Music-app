@@ -1,7 +1,8 @@
+"use client";
+
 import React, { useState, useEffect, useMemo } from "react";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import AdminPageLoader from "../Loader/AdminPageLoader";
-
 import Modal from "../Modal";
 import useSongDelete from "@/app/hooks/useSongDelete";
 import EditSongForm from "./EditSongForm";
@@ -13,7 +14,6 @@ const SongsOverview = () => {
     const [selectedLanguage, setSelectedLanguage] = useState("All");
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedSong, setSelectedSong] = useState<ISongData | null>(null);
-
     const [loading, setLoading] = useState(false);
     const [deletingId, setDeletingId] = useState<string | null>(null);
     const { handleSongDelete } = useSongDelete(songs, setSongs);
@@ -24,10 +24,11 @@ const SongsOverview = () => {
             const { data, error } = await supaBaseInstence
                 .from("songs")
                 .select(
-                    "id, title, artist, language,album_id,audio_file,created_at"
+                    "id, title, artist, language, album_id, audio_file, created_at"
                 );
+
             if (error) throw error;
-            setSongs(data);
+            setSongs(data || []);
         } catch (error) {
             console.error("Error fetching songs:", error);
         } finally {
@@ -40,11 +41,7 @@ const SongsOverview = () => {
     }, []);
 
     const uniqueLanguages = useMemo(() => {
-        const languages = [
-            "All",
-            ...new Set(songs.map((song) => song.language)),
-        ];
-        return languages;
+        return ["All", ...new Set(songs.map((song) => song.language))];
     }, [songs]);
 
     const filteredSongs = useMemo(() => {
@@ -52,10 +49,10 @@ const SongsOverview = () => {
             const matchesSearch =
                 song.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
                 song.artist.toLowerCase().includes(searchQuery.toLowerCase());
+
             const matchesLanguage =
                 selectedLanguage === "All" ||
                 song.language === selectedLanguage;
-
             return matchesSearch && matchesLanguage;
         });
     }, [songs, searchQuery, selectedLanguage]);
@@ -73,10 +70,9 @@ const SongsOverview = () => {
         setIsEditModalOpen(true);
     };
 
-    const handleSaveChanges = () => {
+    const handleSaveChanges = async () => {
         setIsEditModalOpen(false);
-
-        fetchSongs();
+        await fetchSongs();
     };
 
     const handleSongDeleteById = async (id: string) => {
@@ -132,41 +128,58 @@ const SongsOverview = () => {
                         <AdminPageLoader />
                     ) : (
                         <tbody>
-                            {filteredSongs.map((song) => (
-                                <tr
-                                    key={song.id}
-                                    className="border-t border-gray-600 hover:bg-gray-600 transition-all duration-200"
-                                >
-                                    <td className="py-3 px-4 text-white">
-                                        {song.title}
-                                    </td>
-                                    <td className="py-3 px-4 text-white">
-                                        {song.artist}
-                                    </td>
-                                    <td className="py-3 px-4 text-white">
-                                        {song.language}
-                                    </td>
-                                    <td className="py-3 px-4 flex gap-4">
-                                        <button
-                                            onClick={() => handleEditSong(song)}
-                                            className="text-blue-500 hover:text-blue-600 transition duration-200"
-                                        >
-                                            Edit
-                                        </button>
-                                        <button
-                                            onClick={() =>
-                                                handleSongDeleteById(song.id)
-                                            }
-                                            disabled={deletingId === song.id}
-                                            className="text-red-500 hover:text-red-600 transition duration-200"
-                                        >
-                                            {deletingId === song.id
-                                                ? "Deleting..."
-                                                : "Delete"}
-                                        </button>
+                            {filteredSongs.length > 0 ? (
+                                filteredSongs.map((song) => (
+                                    <tr
+                                        key={song.id}
+                                        className="border-t border-gray-600 hover:bg-gray-600 transition-all duration-200"
+                                    >
+                                        <td className="py-3 px-4 text-white">
+                                            {song.title}
+                                        </td>
+                                        <td className="py-3 px-4 text-white">
+                                            {song.artist}
+                                        </td>
+                                        <td className="py-3 px-4 text-white">
+                                            {song.language}
+                                        </td>
+                                        <td className="py-3 px-4 flex gap-4">
+                                            <button
+                                                onClick={() =>
+                                                    handleEditSong(song)
+                                                }
+                                                className="text-blue-500 hover:text-blue-600 transition duration-200"
+                                            >
+                                                Edit
+                                            </button>
+                                            <button
+                                                onClick={() =>
+                                                    handleSongDeleteById(
+                                                        song.id
+                                                    )
+                                                }
+                                                disabled={
+                                                    deletingId === song.id
+                                                }
+                                                className="text-red-500 hover:text-red-600 transition duration-200"
+                                            >
+                                                {deletingId === song.id
+                                                    ? "Deleting..."
+                                                    : "Delete"}
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td
+                                        colSpan={4}
+                                        className="py-3 px-4 text-white text-center"
+                                    >
+                                        No Songs Found!
                                     </td>
                                 </tr>
-                            ))}
+                            )}
                         </tbody>
                     )}
                 </table>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { supaBaseInstence } from "@/lib/supabaseClient";
 import Image from "next/image";
@@ -25,6 +25,7 @@ const EditAlbumForm = ({
     const {
         register,
         handleSubmit,
+        watch,
         formState: { errors },
     } = useForm<FormData>({
         defaultValues: {
@@ -40,45 +41,67 @@ const EditAlbumForm = ({
     const [coverImagePreview, setCoverImagePreview] = useState(
         album.cover_image
     );
+    const [isChanged, setIsChanged] = useState(false);
     const { uploadFileToAlbum } = useCreateUrlFromStorage();
+
+    // Watch form fields
+    const watchedAlbumName = watch("albumName");
+    const watchedArtist = watch("artist");
+    const watchedReleaseDate = watch("releaseDate");
+    const watchedCoverImage = watch("coverImage");
+
+    // Track if any value has changed
+    useEffect(() => {
+        const hasChanges =
+            watchedAlbumName !== album.album_name ||
+            watchedArtist !== album.artist ||
+            watchedReleaseDate !==
+                (album.release_date
+                    ? new Date(album.release_date).toISOString().split("T")[0]
+                    : "") ||
+            (watchedCoverImage && watchedCoverImage.length > 0);
+
+        setIsChanged(hasChanges as boolean);
+    }, [
+        watchedAlbumName,
+        watchedArtist,
+        watchedReleaseDate,
+        watchedCoverImage,
+        album,
+    ]);
 
     const handleCoverImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files ? e.target.files[0] : null;
         if (file) {
             setCoverImagePreview(URL.createObjectURL(file));
+            setIsChanged(true);
         }
     };
 
     const onSubmit = async (data: FormData) => {
-        if (
-            (data.coverImage && data.coverImage.length > 0) ||
-            data.albumName ||
-            data.artist ||
-            data.releaseDate
-        ) {
-            const file = data.coverImage
-                ? data.coverImage[0]
+        if (!isChanged) return; // Prevent unnecessary API calls
+
+        const file = data.coverImage ? data.coverImage[0] : coverImagePreview;
+        const albumCoverUrl =
+            file instanceof File
+                ? await uploadFileToAlbum(file, "album-covers")
                 : coverImagePreview;
-            const albumCoverUrl = await uploadFileToAlbum(file, "album-covers");
 
-            const { error } = await supaBaseInstence
-                .from("albums")
-                .update({
-                    album_name: data.albumName,
-                    artist: data.artist,
-                    release_date: data.releaseDate,
-                    cover_image: albumCoverUrl,
-                })
-                .eq("id", album.id);
+        const { error } = await supaBaseInstence
+            .from("albums")
+            .update({
+                album_name: data.albumName,
+                artist: data.artist,
+                release_date: data.releaseDate,
+                cover_image: albumCoverUrl,
+            })
+            .eq("id", album.id);
 
-            if (error) {
-                console.error("Error updating album:", error.message);
-            } else {
-                toast.success("Album updated successfully");
-                onSave();
-                onClose();
-            }
+        if (error) {
+            console.error("Error updating album:", error.message);
         } else {
+            toast.success("Album updated successfully");
+            onSave();
             onClose();
         }
     };
@@ -199,7 +222,12 @@ const EditAlbumForm = ({
                     </button>
                     <button
                         type="submit"
-                        className="px-6 py-3 text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                        disabled={!isChanged}
+                        className={`px-6 py-3 text-sm font-medium text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 transition ${
+                            isChanged
+                                ? "bg-blue-500 hover:bg-blue-600"
+                                : "bg-gray-400 cursor-not-allowed"
+                        }`}
                     >
                         Save Changes
                     </button>
