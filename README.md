@@ -1,41 +1,116 @@
-<<<<<<< HEAD
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎵 Music Streaming App
 
-## Getting Started
+Welcome to the Music Streaming App – a modern music streaming platform where users can explore, play, and manage songs and albums effortlessly. Built with Next.js, Supabase, Zustand, and Prisma, this application delivers a seamless experience with a premium UI and powerful backend features.
 
-First, run the development server:
+🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+🔹 User Features:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🎧 Explore Songs & Albums – Browse and play songs seamlessly.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🔍 Search Functionality – Find songs and albums quickly.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📜 Multi-Language Support – Filter songs by language.
 
-## Learn More
+🔹 Admin Features:
 
-To learn more about Next.js, take a look at the following resources:
+➕ Add Songs & Albums – Manage your music library with ease.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+✏️ Edit & Update Songs – Modify song details directly from the admin panel.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+❌ Delete Songs – Remove songs with a secure role-based policy.
 
-## Deploy on Vercel
+🔹 Authentication & Security:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+🔐 Supabase Auth – Secure user authentication.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# Music-app
-This is a music Web Application Using Next-JS, Supabase
->>>>>>> b63cbac670b0c7ed6b4994021d027bd956dbeab3
+👥 Role-Based Access Control – Admins can manage content, while users can explore music.
+
+🛠 Optimized Data Fetching – Efficient queries using Prisma ORM.
+
+🛠 Tech Stack
+
+Technology
+
+Usage
+
+Next.js
+
+Frontend framework
+
+Supabase
+
+Authentication, database, and storage
+
+Prisma
+
+Database ORM
+
+tRPC
+
+Type-safe API calls
+
+Zustand
+
+State management
+
+Tailwind CSS
+
+UI Styling
+
+⚡ Installation & Setup
+
+1️⃣ Clone the repository
+
+git clone https://github.com/your-username/music-streaming-app.git
+cd music-streaming-app
+
+2️⃣ Install dependencies
+
+yarn install  # or npm install
+
+3️⃣ Set up environment variables
+
+Create a .env.local file and add your Supabase credentials:
+
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+DATABASE_URL=your-database-url
+
+4️⃣ Run the development server
+
+yarn dev  # or npm run dev
+
+5️⃣ Deploying on Vercel
+https://music-app-mu-green.vercel.app/
+
+📸 Screenshots
+![Screenshot 2025-02-08 200317](https://github.com/user-attachments/assets/45ae4949-dfb9-46dc-a9e5-d3680f7e0494)
+
+![Screenshot 2025-01-27 114601](https://github.com/user-attachments/assets/5e2254d3-4220-44c3-9464-afd46de50ff3)
+
+📌 Roadmap
+
+🎙 Live Audio Streaming
+
+📂 User Playlists
+
+📈 Analytics for Admins
+
+🌐 More Language Support
+
+
+🤝 Contributing
+
+Contributions are welcome! If you find any bugs or have feature requests, feel free to open an issue or submit a pull request.
+
+
+📬 Contact
+izazahamedmallick98@gmail.com
+Linkedin:- https://www.linkedin.com/in/izazam98/
+
+For any questions or collaborations, reach out to me on LinkedIn or Twitter.
+
+Made with ❤️ by Izaz Ahamed Mallick 🚀
+
